@@ -3,6 +3,21 @@ import pygame
 from pygame.locals import *
 
 
+class Entity(pygame.sprite.Sprite):
+    def __init__(self, size: tuple[int, int], pos: tuple[int, int], color: tuple[int, int, int]) -> None:
+        print("Sprite created")
+        pygame.sprite.Sprite.__init__(self= self)
+
+        self.image = pygame.Surface(pos[0], pos[1], size)
+        self.image.fill(color)
+
+        self.image.get_rect()
+    
+
+    def update():
+        pass
+
+
 # Initialize pygame
 pygame.init()
 pygame.font.init()
@@ -31,21 +46,21 @@ frame = screen.get_rect()
 camera = frame.copy()
 
 
-# Floor
-floor_list = [
-    pygame.Rect(0, 800, 1600, 100),
-    pygame.Rect(1700, 800, 1600, 100)
-]
 
-# Player
-player = pygame.Rect(375, -1000, 50, 50)
+# Player Variables
+
+player_rect = pygame.Rect(375, -1000, 50, 50)
+
+floor = pygame.Rect(0, 800, 1600, 100)
+floor2 = pygame.Rect(1700, 800, 1600, 100)
+
+floor_list = [floor, floor2]
+
+test = ((screen, GRAY, pygame.Rect(1610, 800, 1600, 100)),(screen, GRAY, pygame.Rect(0, 800, 1600, 100)))
+
+player_rect = pygame.Rect(375, -1000, 50, 50)
 player_velocity_x = 0
 player_velocity_y = 0
-player_new_x = player.x
-player_new_y = player.y
-player_collision_x = False
-player_collision_y = False
-
 is_on_ground = False
 can_double_jump = False
 dashing = False
@@ -63,22 +78,22 @@ while running:
     # Handle keypresses
     keypress = pygame.key.get_pressed()
 
-    # Player movement horizontal
+    # Player movement - horizontal
     if keypress[K_LEFT]:
         movement_direction = "left"
-        if player.left < 400:
-            for floor in floor_list:
-                floor.x += player_velocity_x
+        if player_rect.left < 400:
+            for rect in floor_list:
+                rect.x += PLAYER_SPEED
         else:
-            player.x -= PLAYER_SPEED
+            player_rect.x -= PLAYER_SPEED
 
     if keypress[K_RIGHT]:
         movement_direction = "right"
-        if player.left > 1200:
-            for floor in floor_list:
-                floor.x -= player_velocity_x
+        if player_rect.left > 1200:
+            for rect in floor_list:
+                rect.x -= PLAYER_SPEED
         else:
-            player.x += PLAYER_SPEED
+            player_rect.x += PLAYER_SPEED
 
     # Jumping and double jumping
     if keypress[K_UP] and is_on_ground:
@@ -99,9 +114,8 @@ while running:
 
     # Update dash state
     if dashing:
-        for floor in floor_list:
-            floor.x += player_velocity_x * -1
-        
+        for rect in floor_list:
+            rect.x += (player_velocity_x * -1)
         if player_velocity_x > 0:
             player_velocity_x -= 0.5
             if player_velocity_x > 15:
@@ -120,34 +134,24 @@ while running:
     # Gravity and falling
     if not is_on_ground:
         player_velocity_y = min(player_velocity_y + GRAVITY, MAX_FALL_SPEED)
-        player_new_y += player_velocity_y
+        player_rect.y += player_velocity_y
     else:
-        player_new_y = 0
+        player_velocity_y = 0
 
     # Floor collision
-    # if player.colliderect(floor_rect):
-    #     player.bottom = floor_rect.top
-    #     is_on_ground = True
-    # else:
-    #     is_on_ground = False
-
-    if player.collidelistall(floor_list):
-        player_collision_y = True
-    else:
-        player_collision_y = False
-
-    if not player_collision_x:
-        player.x = player_new_x
-    if not player_collision_y:
-        player.y = player_new_y
+    if player_rect.collidelist(floor_list):
+        player_rect.bottom = floor_list[player_rect.collidelist(floor_list)].top
+        is_on_ground = True
+    
+    print(is_on_ground)
 
     # Background and objects
     screen.fill(WHITE)
+    pygame.draw.rect(screen, ORANGE, player_rect)  # Player
 
-    for floor in floor_list:
-        pygame.draw.rect(screen, GRAY, floor)
-    
-    pygame.draw.rect(screen, ORANGE, player)  # Player
+    for floor_rect in floor_list:
+        pygame.draw.rect(screen, GRAY, floor_rect)  # Floor
+
 
     # HUD information
     text_timer = font.render(f"Time: {10}s", True, (0, 0, 0))
@@ -170,7 +174,5 @@ while running:
     if player_velocity_x == 0:
         dashing = False
     
-
-    print(is_on_ground)
 # Quit pygame
 pygame.quit()

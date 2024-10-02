@@ -42,3 +42,28 @@ Spring over water
 >walljump
 >dummy fight
 test
+## Structure
+- World group
+    - Entity group
+        - Enemy group
+            - Enemy opject
+                - Entity object
+                    - World object
+        - Projectile group
+            - Entity object
+                - World object
+    - Background group (paralax)
+    - Elements
+        - Floor objects
+            - World object
+        - Obstacle object
+            - World object
+
+- Player group
+    - Player object
+        - Entity object
+            - World object
+
+World object
+- update()
+
