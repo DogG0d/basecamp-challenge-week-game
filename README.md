@@ -1,69 +1,88 @@
 # Basecamp Challenge Week
+
 ## Game idee
+
 Platformer
+
 ## Thema
+
 Onder de Rotterdamse Havens
+
 ## Doel
+
 Je moet naar Albert Heijn, maar niet via de straten omdat het regent.
+
 ## FeaturesS
 
 ## Game
+
 - Movement
-    - Walk
-    - Dashing
-    - jumping
-    - walljump?
-    - interlayer?
-    - attack
+
+  - Walk
+  - Dashing
+  - jumping
+  - walljump?
+  - interlayer?
+  - attack
 
 - Obstacles
-    - spikes
-    - lava
-    - water
-    - poision?
-    - enemies
+
+  - spikes
+  - lava
+  - water
+  - poision?
+  - enemies
 
 - Design
-    - textures
-    - sprites
+
+  - textures
+  - sprites
 
 - Map
-    - Levels
+  - Levels
 
 ## Storyline
+
 pauze of school
 naar de appie
 het regent
 ondergrondse tunnels
 Spring over water
->double jump
->dash
->double jump dash combo?
->walljump
->dummy fight
-test
+
+> double jump
+> dash
+> double jump dash combo?
+> walljump
+> dummy fight
+> test
+
 ## Structure
+
 - World group
-    - Entity group
-        - Enemy group
-            - Enemy opject
-                - Entity object
-                    - World object
-        - Projectile group
-            - Entity object
-                - World object
-    - Background group (paralax)
-    - Elements
-        - Floor objects
-            - World object
-        - Obstacle object
-            - World object
+
+  - Entity group
+    - Enemy group
+      - Enemy opject
+        - Entity object
+          - World object
+    - Projectile group
+      - Entity object
+        - World object
+  - Background group (paralax)
+  - Elements
+    - Floor objects
+      - World object
+    - Obstacle object
+      - World object
 
 - Player group
-    - Player object
-        - Entity object
-            - World object
 
-World object
-- update()
+  - Player object
+    - Entity object
+      - World object
 
+- World object
+
+  - update()
+
+-
