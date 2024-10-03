@@ -1,0 +1,23 @@
+# Colors
+class RGB:
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    GRAY = (128, 128, 128)
+    ORANGE = (220, 50, 110)
+
+
+# Screen
+FRAMES_PER_SECOND = 60
+
+# Logic
+GRAVITY = 1  # Acceleration
+MAX_FALL_SPEED = 10
+
+# Movement
+PLAYER_SPEED = 10
+
+JUMP_HEIGHT = 20
+
+DASH_SPEED = 25
+DASH_DECAY = 0.5
+DASH_COOLDOWN_FRAMES = 120
