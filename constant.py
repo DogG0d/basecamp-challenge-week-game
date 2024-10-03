@@ -3,21 +3,29 @@ class RGB:
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     GRAY = (128, 128, 128)
-    ORANGE = (220, 50, 110)
+    ORANGE = (255, 165, 0)
 
+class direction:
+  LEFT = 1
+  RIGHT = 2
 
 # Screen
+SCREEN_SIZE = (1600, 900)
 FRAMES_PER_SECOND = 60
 
 # Logic
-GRAVITY = 1  # Acceleration
-MAX_FALL_SPEED = 10
+GRAVITY = .15
+MAX_FALL_SPEED = 12
+
+### Player
+# Attributes and defaults
+PLAYER_WIDTH = 50
+PLAYER_HEIGHT = 50
+PLAYER_HEALTH = 10.0
 
 # Movement
 PLAYER_SPEED = 10
-
 JUMP_HEIGHT = 20
-
 DASH_SPEED = 25
 DASH_DECAY = 0.5
 DASH_COOLDOWN_FRAMES = 120
