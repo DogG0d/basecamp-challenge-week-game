@@ -1,35 +1,31 @@
-import time
+# Python 3.12.6
+
+# Game engine
 import pygame
 from pygame.locals import *
+# Constants
+import constant
+from constant import RGB
 
 
-# Initialize pygame
+### Initialize pygame
 pygame.init()
 pygame.font.init()
 
-# Constants
-FRAMES_PER_SECOND = 60
-GRAVITY = 1
-JUMP_HEIGHT = 20
-PLAYER_SPEED = 10
-MAX_FALL_SPEED = 10
-DASH_SPEED = 25
-DASH_DECAY = 0.5
-DASH_COOLDOWN_FRAMES = 120
+### Setup
+# Clock 
+clock = pygame.time.Clock()
 
-# Colors
-WHITE = (255, 255, 255)
-GRAY = (128, 128, 128)
-ORANGE = (220, 50, 110)
-
-# Screen Setup
+# Screen
 screen = pygame.display.set_mode((1600, 900))
 pygame.display.set_caption("Challangeweek")
-font = pygame.font.SysFont(pygame.font.get_default_font(), 36)
-clock = pygame.time.Clock()
+
+# Display
 frame = screen.get_rect()
 camera = frame.copy()
 
+# Text
+font = pygame.font.SysFont(pygame.font.get_default_font(), 36)
 
 # Floor
 floor_list = [
@@ -39,28 +35,31 @@ floor_list = [
 
 # Player
 player = pygame.Rect(375, -1000, 50, 50)
-player_velocity_x = 0
-player_velocity_y = 0
+player_vel_x = 0
+player_vel_y = 0
 player_new_x = player.x
 player_new_y = player.y
 player_collision_x = False
 player_collision_y = False
 
+dash_cooldown = constant.DASH_COOLDOWN_FRAMES
+
 is_on_ground = False
 can_double_jump = False
-dashing = False
-dash_cooldown = DASH_COOLDOWN_FRAMES
+is_dashing = False
 movement_direction = "right"
 
-# Game loop
+### Game loop
 running = True
+
 while running:
-    # Event handling
+    ### Event handling
     for event in pygame.event.get():
+        # Quiting
         if event.type == QUIT:
             running = False
 
-    # Handle keypresses
+    ### Handle keypresses
     keypress = pygame.key.get_pressed()
 
     # Player movement horizontal
@@ -68,59 +67,61 @@ while running:
         movement_direction = "left"
         if player.left < 400:
             for floor in floor_list:
-                floor.x += player_velocity_x
+                floor.x += player_vel_x
         else:
-            player.x -= PLAYER_SPEED
+            for floor in floor_list:
+                player_new_x -= player_vel_x
 
     if keypress[K_RIGHT]:
         movement_direction = "right"
         if player.left > 1200:
             for floor in floor_list:
-                floor.x -= player_velocity_x
+                floor.x -= player_vel_x
         else:
-            player.x += PLAYER_SPEED
+            for floor in floor_list:
+                player_new_x += player_vel_x
 
     # Jumping and double jumping
     if keypress[K_UP] and is_on_ground:
-        player_velocity_y = -JUMP_HEIGHT
+        player_vel_y = -constant.JUMP_HEIGHT
         can_double_jump = True
     elif keypress[K_UP] and can_double_jump:
-        player_velocity_y = -JUMP_HEIGHT
+        player_vel_y = -constant.JUMP_HEIGHT
         can_double_jump = False
 
     # Dashing logic
-    if keypress[K_e] and dash_cooldown >= DASH_COOLDOWN_FRAMES and not dashing:
-        dashing = True
+    if keypress[K_e] and dash_cooldown >= constant.DASH_COOLDOWN_FRAMES and not is_dashing:
+        is_dashing = True
         dash_cooldown = 0
         if movement_direction == "right":
-            player_velocity_x = DASH_SPEED
+            player_vel_x = constant.DASH_SPEED
         elif movement_direction == "left":
-            player_velocity_x = -DASH_SPEED
+            player_vel_x = -constant.DASH_SPEED
 
     # Update dash state
-    if dashing:
+    if is_dashing:
         for floor in floor_list:
-            floor.x += player_velocity_x * -1
+            floor.x += player_vel_x * -1
         
-        if player_velocity_x > 0:
-            player_velocity_x -= 0.5
-            if player_velocity_x > 15:
-                player_velocity_y = 0
-            if player_velocity_x == 15:
-                player_velocity_x = 5
+        if player_vel_x > 0:
+            player_vel_x -= 0.5
+            if player_vel_x > 15:
+                player_vel_y = 0
+            if player_vel_x == 15:
+                player_vel_x = 5
 
-        elif player_velocity_x < 0:
-            player_velocity_x += 0.5
-            if player_velocity_x < -15:
-                player_velocity_y = 0
-            if player_velocity_x == -15:
-                player_velocity_x = -5
+        elif player_vel_x < 0:
+            player_vel_x += 0.5
+            if player_vel_x < -15:
+                player_vel_y = 0
+            if player_vel_x == -15:
+                player_vel_x = -5
 
 
     # Gravity and falling
     if not is_on_ground:
-        player_velocity_y = min(player_velocity_y + GRAVITY, MAX_FALL_SPEED)
-        player_new_y += player_velocity_y
+        player_vel_y = min(player_vel_y + constant.GRAVITY, constant.MAX_FALL_SPEED)
+        player_new_y += player_vel_y
     else:
         player_new_y = 0
 
@@ -142,18 +143,18 @@ while running:
         player.y = player_new_y
 
     # Background and objects
-    screen.fill(WHITE)
+    screen.fill(RGB.WHITE)
 
     for floor in floor_list:
-        pygame.draw.rect(screen, GRAY, floor)
+        pygame.draw.rect(screen, RGB.GRAY, floor)
     
-    pygame.draw.rect(screen, ORANGE, player)  # Player
+    pygame.draw.rect(screen, RGB.ORANGE, player)  # Player
 
     # HUD information
-    text_timer = font.render(f"Time: {10}s", True, (0, 0, 0))
-    text_dashcooldown = font.render(f"Dashcooldown: {dash_cooldown}/{DASH_COOLDOWN_FRAMES}", True, (0, 0, 0))
-    x_velocity = font.render(f"X_Velocity: {player_velocity_x:.2f}", True, (0, 0, 0))
-    y_velocity = font.render(f"Y_velocity: {player_velocity_y:.2f}", True, (0, 0, 0))
+    text_timer = font.render(f"Time: {clock.get_time}s", True, RGB.BLACK)
+    text_dashcooldown = font.render(f"Dashcooldown: {dash_cooldown}/{constant.DASH_COOLDOWN_FRAMES}", True, RGB.BLACK)
+    x_velocity = font.render(f"X_Velocity: {player_vel_x:.2f}", True, RGB.BLACK)
+    y_velocity = font.render(f"Y_velocity: {player_vel_y:.2f}", True, RGB.BLACK)
 
     # Draw HUD
     screen.blit(text_timer, (200, 500))
@@ -163,14 +164,16 @@ while running:
 
     # Update display and clock
     pygame.display.flip()
-    clock.tick(FRAMES_PER_SECOND)
+    clock.tick(constant.FRAMES_PER_SECOND)
 
     # Update cooldowns
-    dash_cooldown = min(dash_cooldown + 1, DASH_COOLDOWN_FRAMES)
-    if player_velocity_x == 0:
-        dashing = False
+    dash_cooldown = min(dash_cooldown + 1, constant.DASH_COOLDOWN_FRAMES)
+    if player_vel_x == 0:
+        is_dashing = False
     
+    ## DEBUG
+    print()
 
-    print(is_on_ground)
-# Quit pygame
+
+### Cleanup and close game
 pygame.quit()
