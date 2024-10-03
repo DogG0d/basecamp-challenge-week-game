@@ -12,7 +12,7 @@ Onder de Rotterdamse Havens
 
 Je moet naar Albert Heijn, maar niet via de straten omdat het regent.
 
-## FeaturesS
+## Features
 
 ## Game
 
@@ -61,28 +61,33 @@ Spring over water
 - World group
 
   - Entity group
+
     - Enemy group
+
       - Enemy opject
         - Entity object
           - World object
+
     - Projectile group
       - Entity object
         - World object
-  - Background group (paralax)
-  - Elements
-    - Floor objects
-      - World object
-    - Obstacle object
-      - World object
 
-- Player group
+  - Background group
 
-  - Player object
-    - Entity object
-      - World object
+    - Elements
 
-- World object
+      - Floor objects
 
-  - update()
+        - World object
 
--
+      - Obstacle object
+        - World object
+
+    - Background
+
+  - Player group
+    - Player object
+      - Entity object
+        - World object
+
+---
