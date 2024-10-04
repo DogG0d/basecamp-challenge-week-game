@@ -36,8 +36,9 @@ input = InputManager()
 floor_group = pygame.sprite.Group()
 floor_group.add(sprites.Base(0, 800, 1600, 100, RGB.GRAY))
 floor_group.add(sprites.Base(1700, 800, 1600, 100, RGB.GRAY))
+floor_group.add(sprites.Base(1200, 700, 1600, 100, RGB.GRAY))
 
-# Players
+# Playersdddddddd
 player_group = pygame.sprite.Group()
 player_one = sprites.Player(400, 100, 50, 50, RGB.ORANGE, constant.PLAYER_HEALTH)
 player_group.add(player_one)
@@ -83,9 +84,9 @@ while running:
         if player_one.rect.left < 400:
             for floor in floor_group.sprites():
                  print(floor)
-                 floor.update(dx = player_one.x_collision_compensation(player_one.vel_x, floor_group))
+                 floor.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
         else:
-            player_one.update(dx = -player_one.x_collision_compensation(player_one.vel_x, floor_group))
+            player_one.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
 
     if input.isKeyDown(K_d) or input.isKeyDown(K_RIGHT):
         print("KEY RIGHT")
@@ -93,9 +94,9 @@ while running:
         if player_one.rect.left > 1200:
             for floor in floor_group.sprites():
                  print(floor)
-                 floor.update(dx = -player_one.x_collision_compensation(player_one.vel_x, floor_group))
+                 floor.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
         else:
-            player_one.update(dx = player_one.x_collision_compensation(player_one.vel_x, floor_group))
+            player_one.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
         # movement_direction = "right"
         # if player.left > 1200:
         #     for floor in floor_list:
@@ -148,8 +149,23 @@ while running:
     # Gravity
     vel_old = player_one.vel_y
     if not player_one.on_ground:
-        player_one.vel_y = player_one.y_collision_compensation(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group)
+        player_one.vel_y = player_one.new_y_pos(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group)
         player_one.update(dy=player_one.vel_y)
+
+    if player_one.vel_y != vel_old + constant.GRAVITY and player_one.vel_y != MAX_FALL_SPEED:
+        player_one.on_ground = True
+        player_one.vel_y = 0
+    else:
+        player_one.on_ground = False
+        
+    # print("Comp", player_one.y_collision_compensation(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group))
+    
+    # if player_one.y_collision_compensation(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group) != 0:
+    #     print("RUN")
+    #     player_one.on_ground = False
+                                                              
+
+        
 
     # player_x_check = pygame.rect()
 
@@ -184,7 +200,7 @@ while running:
 
     floor_group.draw(display)
     player_group.draw(display)
-
+    print(player_one.vel_y)
     ### HUD information
     text_timer = font_36.render(f"Time: {pygame.time.get_ticks()/1000:.2f}s", True, RGB.WHITE)
     text_dashcooldown = font_36.render(f"Dashcooldown: {dash_cooldown}/{constant.DASH_COOLDOWN_FRAMES}", True, RGB.WHITE)
