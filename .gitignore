@@ -117,5 +117,8 @@ dmypy.json
 # VSCODE IDE
 .vscode
 
-#Pycharm IDE
+# Pycharm IDE
 .idea
+
+# Exports
+exports/

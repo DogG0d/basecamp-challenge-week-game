@@ -29,6 +29,10 @@ class Entity(WorldObject):
     self.gravity = gravity
   
 
+  def update(self): # Add physics system in here
+    pass
+  
+
 
 
 class Player(Entity):
@@ -43,7 +47,7 @@ class Player(Entity):
     self.health = starting_health
 
 
-  def update(self, dx:int=0, dy:int=0, dhealth:float=0.0):
+  def update(self, dx:int=0, dy:int=0, dhealth:float=0.0): # Add movement in here
     super().update(dx, dy)
     self.health += dhealth
   
