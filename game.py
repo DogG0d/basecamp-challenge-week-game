@@ -21,7 +21,7 @@ pygame.font.init()
 clock = pygame.time.Clock()
 
 # Display
-display = pygame.display.set_mode(constant.SCREEN_SIZE)
+display = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Challangeweek - Name Unknown")
 
 # frame = display.get_rect()
@@ -40,7 +40,7 @@ floor_group.add(sprites.Base(1200, 700, 1600, 100, RGB.GRAY))
 
 # Playersdddddddd
 player_group = pygame.sprite.Group()
-player_one = sprites.Player(400, 100, 50, 50, RGB.ORANGE, constant.PLAYER_HEALTH)
+player_one = sprites.Player(400, 100, 50, 50, RGB.ORANGE, PLAYER_HEALTH)
 player_group.add(player_one)
 
 # player = pygame.Rect(375, 100, 50, 50)
@@ -106,14 +106,18 @@ while running:
         #         player_new_x += player_vel_x
 
     # Jumping and double jumping
-    # if (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
-    #     print("KEY JUMP")
-    #     player_vel_y = -constant.JUMP_HEIGHT
-    #     can_double_jump = True
-    # elif (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
-    #     print("KEY DOUBLE JUMP")
-    #     player_vel_y = -constant.JUMP_HEIGHT
-    #     can_double_jump = False
+    if (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
+        print("KEY JUMP")
+        player_one.vel_y = -JUMP_HEIGHT
+        can_double_jump = True
+        player_one.is_jumping = True
+    elif (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
+        print("KEY DOUBLE JUMP")
+        player_one.vel_y = -JUMP_HEIGHT
+        can_double_jump = False
+        player_one.is_jumping = True
+    else:
+        player_one.is_jumping = False
 
     # # Dashing logic
     # if input.isKeyPressed(K_e) and dash_cooldown >= constant.DASH_COOLDOWN_FRAMES and not is_dashing:
@@ -152,7 +156,7 @@ while running:
         player_one.vel_y = player_one.new_y_pos(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group)
         player_one.update(dy=player_one.vel_y)
 
-    if player_one.vel_y != vel_old + constant.GRAVITY and player_one.vel_y != MAX_FALL_SPEED:
+    if player_one.vel_y != vel_old + constant.GRAVITY and player_one.vel_y != MAX_FALL_SPEED and not player_one.is_jumping:
         player_one.on_ground = True
         player_one.vel_y = 0
     else:
@@ -200,7 +204,7 @@ while running:
 
     floor_group.draw(display)
     player_group.draw(display)
-    print(player_one.vel_y)
+
     ### HUD information
     text_timer = font_36.render(f"Time: {pygame.time.get_ticks()/1000:.2f}s", True, RGB.WHITE)
     text_dashcooldown = font_36.render(f"Dashcooldown: {dash_cooldown}/{constant.DASH_COOLDOWN_FRAMES}", True, RGB.WHITE)
