@@ -8,7 +8,7 @@ from pygame.locals import *
 # Game logics
 import constant
 from constant import *
-from inputmanager import InputManager
+from inputstream import InputStream
 import sprites
 
 
@@ -30,7 +30,7 @@ pygame.display.set_caption("Challangeweek - Name Unknown")
 font_36 = pygame.font.SysFont(pygame.font.get_default_font(), 36)
 
 # Input manager
-input = InputManager()
+input = InputStream()
 
 # Floor
 floor_group = pygame.sprite.Group()
@@ -71,53 +71,62 @@ while running:
     ### Handle keypresses
     input.processInput()  # Update keyboard state
 
-    # Full Screen
+    ### Update objects
+    player_group.update()
+    floor_group.update()
+
+
+    ### Check enemy collision
+    # ...
+
+    ### Full Screen
     # if input.isKeyPressed(K_F11):
     #     print("Fullscreen toggle")
     #     pygame.display.toggle_fullscreen()
 
-    # Player movement horizontal
-    if input.isKeyDown(K_a) or input.isKeyDown(K_LEFT):
-        print("KEY LEFT")
-        player_one.direction = direction.LEFT
+    ### Player movement horizontal
+    # if input.isKeyDown(K_a) or input.isKeyDown(K_LEFT):
+    #     print("KEY LEFT")
+    #     player_one.direction = Direction.LEFT
         
-        if player_one.rect.left < 400:
-            for floor in floor_group.sprites():
-                 print(floor)
-                 floor.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
-        else:
-            player_one.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
+    #     if player_one.rect.left < 400:
+    #         for floor in floor_group.sprites():
+    #              print(floor)
+    #              floor.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
+    #     else:
+    #         player_one.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
 
-    if input.isKeyDown(K_d) or input.isKeyDown(K_RIGHT):
-        print("KEY RIGHT")
-        player_one.direction = direction.RIGHT
-        if player_one.rect.left > 1200:
-            for floor in floor_group.sprites():
-                 print(floor)
-                 floor.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
-        else:
-            player_one.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
-        # movement_direction = "right"
-        # if player.left > 1200:
-        #     for floor in floor_list:
-        #         floor.x -= player_vel_x
-        # else:
-        #     for floor in floor_list:
-        #         player_new_x += player_vel_x
+    # if input.isKeyDown(K_d) or input.isKeyDown(K_RIGHT):
+    #     print("KEY RIGHT")
+    #     player_one.direction = Direction.RIGHT
+    #     if player_one.rect.left > 1200:
+    #         for floor in floor_group.sprites():
+    #              print(floor)
+    #              floor.update(dx = -player_one.new_x_pos(player_one.vel_x, floor_group))
+    #     else:
+    #         player_one.update(dx = player_one.new_x_pos(player_one.vel_x, floor_group))
+    
+    ### movement_direction = "right"
+    # if player.left > 1200:
+    #     for floor in floor_list:
+    #         floor.x -= player_vel_x
+    # else:
+    #     for floor in floor_list:
+    #         player_new_x += player_vel_x
 
-    # Jumping and double jumping
-    if (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
-        print("KEY JUMP")
-        player_one.vel_y = -JUMP_HEIGHT
-        can_double_jump = True
-        player_one.is_jumping = True
-    elif (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
-        print("KEY DOUBLE JUMP")
-        player_one.vel_y = -JUMP_HEIGHT
-        can_double_jump = False
-        player_one.is_jumping = True
-    else:
-        player_one.is_jumping = False
+    ### Jumping and double jumping
+    # if (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
+    #     print("KEY JUMP")
+    #     player_one.vel_y = -JUMP_HEIGHT
+    #     can_double_jump = True
+    #     player_one.is_jumping = True
+    # elif (input.isKeyPressed(K_w) or input.isKeyDown(K_UP)):
+    #     print("KEY DOUBLE JUMP")
+    #     player_one.vel_y = -JUMP_HEIGHT
+    #     can_double_jump = False
+    #     player_one.is_jumping = True
+    # else:
+    #     player_one.is_jumping = False
 
     # # Dashing logic
     # if input.isKeyPressed(K_e) and dash_cooldown >= constant.DASH_COOLDOWN_FRAMES and not is_dashing:
@@ -129,9 +138,9 @@ while running:
     #     elif movement_direction == "left":
     #         player_vel_x = -constant.DASH_SPEED
 
-    # Update dash state
-    if is_dashing:
-        pass
+    ### Update dash state
+    # if is_dashing:
+    #     pass
         # for floor in floor_list:
         #     floor.x += player_vel_x * -1
         
@@ -167,9 +176,6 @@ while running:
     # if player_one.y_collision_compensation(min(player_one.vel_y + constant.GRAVITY, MAX_FALL_SPEED), floor_group) != 0:
     #     print("RUN")
     #     player_one.on_ground = False
-                                                              
-
-        
 
     # player_x_check = pygame.rect()
 

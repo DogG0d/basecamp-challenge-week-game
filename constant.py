@@ -1,13 +1,19 @@
 # Colors
 class RGB:
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-    GRAY = (128, 128, 128)
-    ORANGE = (255, 165, 0)
+  WHITE = (255, 255, 255)
+  BLACK = (0, 0, 0)
+  GRAY = (128, 128, 128)
+  ORANGE = (255, 165, 0)
 
-class direction:
+class Direction:
   LEFT = 1
   RIGHT = 2
+
+
+
+class PlayerState:
+   IDLE = 0
+   MOVING = 1
 
 # Screen
 SCREEN_SIZE = (1600, 900)

@@ -8,7 +8,7 @@ from pygame.locals import *
 # Game logics
 import constant
 from constant import *
-from inputmanager import InputManager
+from inputstream import InputStream
 import sprites
 
 
@@ -30,7 +30,7 @@ pygame.display.set_caption("Challangeweek - Name Unknown")
 font_36 = pygame.font.SysFont(pygame.font.get_default_font(), 36)
 
 # Input manager
-input = InputManager()
+input = InputStream()
 
 # Floor
 floor_group = pygame.sprite.Group()
@@ -82,7 +82,7 @@ while running:
     # Player movement horizontal
     if input.isKeyDown(K_a) or input.isKeyDown(K_LEFT):
         print("KEY LEFT")
-        player_one.direction = direction.LEFT
+        player_one.direction = Direction.LEFT
         if player_one.rect.left < 400:
             for floor in floor_group.sprites():
                  print(floor)
@@ -92,7 +92,7 @@ while running:
 
     if input.isKeyDown(K_d) or input.isKeyDown(K_RIGHT):
         print("KEY RIGHT")
-        player_one.direction = direction.RIGHT
+        player_one.direction = Direction.RIGHT
         if player_one.rect.left > 1200:
             for floor in floor_group.sprites():
                  print(floor)

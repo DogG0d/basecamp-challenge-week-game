@@ -1,6 +1,6 @@
 import pygame
 
-class InputManager:
+class InputStream:
     def __init__(self):  # Initiate input manager
         self.currentKeyStates = None
         self.previousKeyStates = None

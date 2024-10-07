@@ -1,5 +1,8 @@
 import pygame
 import constant
+import globals
+from inputstream import InputStream
+
 
 class WorldObject(pygame.sprite.Sprite):
   def __init__(self, x:int=None, y:int=None, w:int=constant.PLAYER_WIDTH, h:int=constant.PLAYER_HEIGHT, color:tuple[int,int,int]=constant.RGB.BLACK) -> None:
@@ -13,10 +16,16 @@ class WorldObject(pygame.sprite.Sprite):
     self.rect.y = y
   
 
-  def update(self, dx:int=0, dy:int=0):
+  def update(self) -> None:
     super().update(self)
-    self.rect.x += dx
-    self.rect.y += dy
+  
+
+  def move() -> None:
+    pass
+
+
+  def is_colliding() -> bool:
+    return False
 
 
   def get_rect(self) -> pygame.rect.Rect:
@@ -29,28 +38,17 @@ class Entity(WorldObject):
     self.gravity = gravity
   
 
-  # def update(self): # Add physics system in here
-  #   pass
+  def update(self) -> None:
+    super().update(self)
   
 
-
-
-class Player(Entity):
-  vel_x = 10
-  vel_y = 0
-  flying_velocity_multiplier = 1.0
-  direction = None
-  on_ground = False
-
-  def __init__(self, x:int=None, y:int=None, w:int=constant.PLAYER_WIDTH, h:int=constant.PLAYER_HEIGHT, color:tuple[int,int,int]=constant.RGB.BLACK, starting_health:float=constant.PLAYER_HEALTH) -> None:
-    super().__init__(x, y, w, h, color)
-    self.health = starting_health
-    self.is_jumping = False
-
-
-  def update(self, dx:int=0, dy:int=0, dhealth:float=0.0): # Add movement in here
-    super().update(dx, dy)
-    self.health += dhealth
+  def is_on_ground(self) -> bool:
+    dummy = self.get_rect().copy()
+    dummy.x += 1
+    # for base in globals.world.base_group:  # To Be Added
+    #   dummy.colliderect(base.get_rect())
+    return False
+    
   
   def new_x_pos(self, dx: int = 0, object_group: pygame.sprite.Group = None):
       dummy_rect = self.rect.copy()
@@ -78,6 +76,45 @@ class Player(Entity):
           returnable = dummy_rect.top - floor.rect.bottom
           return returnable
     return dy
+
+
+
+class Player(Entity):
+  # vel_x = 10
+  # vel_y = 0
+  # flying_velocity_multiplier = 1.0
+  # direction = None
+  # on_ground = False
+
+  def __init__(self, x:int=None, y:int=None, w:int=constant.PLAYER_WIDTH, h:int=constant.PLAYER_HEIGHT, color:tuple[int,int,int]=constant.RGB.BLACK, starting_health:float=constant.PLAYER_HEALTH) -> None:
+    super().__init__(x, y, w, h, color)
+    self.health = starting_health
+    self.state = constant.PlayerState.IDLE
+  
+
+  def __init__(self, input_stream: InputStream):
+     self.input = input_stream
+
+
+  def update(self): # Add movement in here
+    # Run parent method
+    super().update()
+
+    ### Move left
+    if self.input.isKeyDown(pygame.K_a) or self.input.isKeyDown(pygame.K_LEFT):
+      self.move()
+
+    ### Move right
+    if self.input.isKeyDown(pygame.K_d) or self.input.isKeyDown(pygame.K_RIGHT):
+      self.move()
+    
+    ### Jump
+    if self.input.isKeyPressed(pygame.K_w) or self.input.isKeyPressed(pygame.K_UP):
+      self.move()
+
+    ### Dash
+    if self.input.isKeyPressed(pygame.K_e):
+      self.move()
 
 
 class Base(WorldObject):
