@@ -20,7 +20,9 @@ class WorldObject(pygame.sprite.Sprite):
     super().update(self)
   
 
-  def move() -> None:
+  def move(self, dx, dy) -> None:
+    self.x += dx
+    self.y += dy
     pass
 
 

@@ -17,6 +17,7 @@ class PlayerState:
 
 # Screen
 SCREEN_SIZE = (1600, 900)
+# SCREEN_SIZE = (640, 480)
 FRAMES_PER_SECOND = 60
 
 # Logic
