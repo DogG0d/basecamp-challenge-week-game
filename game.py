@@ -24,8 +24,12 @@ class Game():
         # Display
         self.display = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption("Challangeweek - Name Unknown")
+            "player": load_image("entities/player.png"),
             "grass": load_images("tiles/grass"),
             "clouds": load_images("clouds")
+        # Entities
+        self.player = PhysicsEntity(self, "player", (50, 50), (8, 15))
+
         # Clouds
         self.clouds = Clouds(self.assets["clouds"], count=16)
     
@@ -35,6 +39,10 @@ class Game():
             # Clouds
             self.clouds.update()
             self.clouds.render(self.screen, render_scroll)
+
+            # Entities
+            self.player.render(surf=self.screen, offset=render_scroll)
+
             pygame.display.update()
             self.clock.tick(constant.FRAMES_PER_SECOND)
 
