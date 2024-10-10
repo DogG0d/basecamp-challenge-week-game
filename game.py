@@ -10,6 +10,8 @@ import constant
 from constant import *
 from inputstream import InputStream
 import sprites
+from scripts.utils import load_image, load_images
+from scripts.tilemap import Tilemap
 from scripts.clouds import Clouds
 
 class Game():
@@ -24,9 +26,15 @@ class Game():
         # Display
         self.display = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption("Challangeweek - Name Unknown")
+        # Assets
+        self.assets = {  # Be careful with photos that contain a lot of black: Black is CHROMA KEYED OUT for transparency
             "player": load_image("entities/player.png"),
+            "decor": load_images("tiles/decor"),
+            "large_decor": load_images("tiles/large_decor"),
+            "stone": load_images("tiles/stone"),
             "grass": load_images("tiles/grass"),
             "clouds": load_images("clouds")
+        }
         # Entities
         self.player = PhysicsEntity(self, "player", (50, 50), (8, 15))
 
