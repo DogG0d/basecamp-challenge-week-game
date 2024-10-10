@@ -5,7 +5,6 @@ import sys
 # import time
 # Game engine
 import pygame
-from pygame.locals import *
 # Game logics
 import constant
 from constant import *
@@ -26,6 +25,7 @@ class Game():
         self.display = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption("Challangeweek - Name Unknown")
     
+
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -40,7 +40,6 @@ class Game():
             ### Update objects
             player_group.update()
             floor_group.update()
-
 
             ### Check enemy collision
             # ...
@@ -167,7 +166,7 @@ class Game():
             #     player.y = player_new_y
 
             ### Draw
-            display.fill(RGB.BLACK)
+            self.display.fill(RGB.BLACK)
 
             # for floor in floor_list:
             #     pygame.draw.rect(display, RGB.GRAY, floor)
@@ -184,14 +183,14 @@ class Game():
             y_velocity = font_36.render(f"Y_velocity: {player_one.vel_y:.2f}", True, RGB.WHITE)
 
             # Draw HUD
-            display.blit(text_timer, (20, 20))
-            display.blit(text_dashcooldown, (20, 45))
-            display.blit(x_velocity, (20, 70))
-            display.blit(y_velocity, (20, 95))
+            self.display.blit(text_timer, (20, 20))
+            self.display.blit(text_dashcooldown, (20, 45))
+            self.display.blit(x_velocity, (20, 70))
+            self.display.blit(y_velocity, (20, 95))
 
             # Update display and clock
             pygame.display.update()
-            clock.tick(constant.FRAMES_PER_SECOND)
+            self.clock.tick(constant.FRAMES_PER_SECOND)
 
             # Update cooldowns
             dash_cooldown = min(dash_cooldown + 1, constant.DASH_COOLDOWN_FRAMES)
@@ -201,9 +200,9 @@ class Game():
             ## DEBUG
             # print()
 
+
 # frame = display.get_rect()
 # camera = frame.copy()
-
 font_36 = pygame.font.SysFont(pygame.font.get_default_font(), 36)
 
 # Input manager
@@ -217,7 +216,7 @@ floor_group.add(sprites.Base(1200, 700, 1600, 100, RGB.GRAY))
 
 # Playersdddddddd
 player_group = pygame.sprite.Group()
-player_one = sprites.Player(400, 100, 50, 50, RGB.ORANGE, PLAYER_HEALTH)
+player_one = sprites.Player(400, 100, 50, 50, RGB.ORANGE, constant.PLAYER_HEALTH)
 player_group.add(player_one)
 
 # player = pygame.Rect(375, 100, 50, 50)
