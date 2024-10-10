@@ -21,7 +21,7 @@ pygame.font.init()
 clock = pygame.time.Clock()
 
 # Display
-display = pygame.display.set_mode(constant.SCREEN_SIZE)
+display = pygame.display.set_mode(constant.DISPLAY_SIZE)
 pygame.display.set_caption("Challangeweek - Name Unknown")
 
 # frame = display.get_rect()
