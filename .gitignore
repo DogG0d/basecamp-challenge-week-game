@@ -121,7 +121,7 @@ dmypy.json
 .idea
 
 # Exports
-exports/
+.exports/
 
 # Python temp files
 tempCodeRunnerFile.py
