@@ -4,6 +4,7 @@ class RGB:
   BLACK = (0, 0, 0)
   GRAY = (128, 128, 128)
   ORANGE = (255, 165, 0)
+  SKY_BLUE = (135, 206, 235)
 
 class Direction:
   LEFT = 1
@@ -16,12 +17,13 @@ class PlayerState:
    MOVING = 1
 
 # Screen
-SCREEN_SIZE = (1600, 900)
+DISPLAY_SIZE = (864, 486)
+GAME_SIZE = (432, 243)
 # SCREEN_SIZE = (640, 480)
 FRAMES_PER_SECOND = 60
 
 # Logic
-GRAVITY = .2
+GRAVITY = .1
 MAX_FALL_SPEED = 12
 
 ### Player
@@ -32,7 +34,7 @@ PLAYER_HEALTH = 10.0
 
 # Movement
 PLAYER_SPEED = 10
-JUMP_HEIGHT = 10
+JUMP_HEIGHT = 3
 DASH_SPEED = 25
 DASH_DECAY = 0.5
 DASH_COOLDOWN_FRAMES = 120
