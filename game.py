@@ -43,8 +43,8 @@ class Game():
         self.current_screen: Screen | GameScreen
         
         self.screens.update({
-            "game": GameScreen(game=self),
-            "editor": EditorScreen(game=self)
+            "editor": EditorScreen(game=self),
+            "game": GameScreen(game=self)
             })
         
         self.current_screen = self.screens.get("game")
@@ -52,8 +52,6 @@ class Game():
         
     def run(self):
         while True:
-            ### Current screen render logic
-            self.current_screen.render()
 
             ### Event grabbing
             events = pygame.event.get()
@@ -81,6 +79,9 @@ class Game():
             ### Current screen update logic
             self.current_screen.update()
 
+            ### Current screen render logic
+            self.current_screen.render()
+
             # FINAL Updating display
             self.display.blit(pygame.transform.scale(self.current_screen.get_screen(), self.display.get_size()), (0, 0))
 
@@ -91,7 +92,7 @@ class Game():
     
 
     def get_assets(self) -> dict[str, pygame.Surface | list[pygame.Surface] | Animation]:
-        return dict(self.current_screen.get_assets())
+        return self.assets
     
 
     def get_entities(self) -> list:

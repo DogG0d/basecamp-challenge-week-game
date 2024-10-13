@@ -33,7 +33,7 @@ class PhysicsEntity():
         self.game = game
         self.type = type
         self.pos = list(pos)
-        self.size = size
+        self.size = list(size)
 
         self.vel = [0,0]
         self.terminal_vel = 5
@@ -49,14 +49,13 @@ class PhysicsEntity():
         self.set_action("idle")
     
     def copy_rect(self):
-        return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
+        return pygame.Rect(*self.pos, *self.size)
     
 
     def set_action(self, action: str) -> None:
         if action != self.action:
             self.action = action
             self.animation = self.game.get_assets()[self.type + "/" + self.action].copy()
-
 
 
     def update(self, tilemap: Tilemap, movement: tuple[int, int] = (0,0)) -> None:
