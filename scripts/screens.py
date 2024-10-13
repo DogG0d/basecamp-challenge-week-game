@@ -10,6 +10,8 @@ from constant import RGB
 class Screen:
     def __init__(self, game: "game.Game", screen_size: tuple[int, int] = constant.GAME_SIZE):
         self.game = game
+        self.assets = {}
+        self.screen_size = screen_size
         self.screen = pygame.Surface(screen_size)
 
         ### Setup
@@ -17,27 +19,35 @@ class Screen:
         self.input = self.game.input
     
 
-    def render():
+    def render(self) -> None:
         pass
 
 
-    def update(self):
+    def update(self) -> None:
         pass
 
 
     def get_screen(self) -> pygame.Surface:
         return self.screen
+    
 
+    def get_assets(self) -> dict[str, pygame.Surface | list[pygame.Surface] | Animation]:
+        return self.assets
+    
+
+    def get_render_scale(self) -> float:
+        return constant.DISPLAY_SIZE / self.screen_size
+        
 
 class GameScreen(Screen):
     def __init__(self, game: "game.Game", screen_size: tuple[int, int] = constant.GAME_SIZE):
-        super().__init__(game, screen_size)
+        super().__init__(game=game, screen_size=screen_size)
         
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE)
         
         # Assets
-        self.game.assets.update({  # Be careful with photos that contain a lot of black: Black is CHROMA KEYED OUT for transparency
+        self.assets = {
             "player": load_image("entities/player.png"),
             "decor": load_images("tiles/decor"),
             "large_decor": load_images("tiles/large_decor"),
@@ -49,7 +59,7 @@ class GameScreen(Screen):
             "player/jump": Animation(load_images("entities/player/jump")),
             "player/slide": Animation(load_images("entities/player/slide")),
             "player/wall_slide": Animation(load_images("entities/player/wall_slide"))
-        })
+        }
 
         # Tilemap
         self.tilemap = Tilemap(self.game, tile_size=16)
@@ -64,10 +74,11 @@ class GameScreen(Screen):
         # Camera offset
         self.scroll = [0, 0]
 
+
     def render(self):
         # Camera scroll
-        self.scroll[0] += (self.player.copy_rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) / 30
-        self.scroll[1] += (self.player.copy_rect().centery - self.screen.get_height() / 2 - self.scroll[1]) / 30
+        self.scroll[0] += (self.player.copy_rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) / 20
+        self.scroll[1] += (self.player.copy_rect().centery - self.screen.get_height() / 2 - self.scroll[1]) / 20
         render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
 
         # Reset screen
@@ -92,15 +103,15 @@ class GameScreen(Screen):
         self.movement = [0, 0]
 
         # Walk right
-        if self.input.anyKeyDown([pygame.K_d, pygame.K_RIGHT]):
+        if self.input.get_keyboard().any_key_down([pygame.K_d, pygame.K_RIGHT]):
             self.movement[0] += 2
         
         # Walk left
-        if self.input.anyKeyDown([pygame.K_a, pygame.K_LEFT]):
+        if self.input.get_keyboard().any_key_down([pygame.K_a, pygame.K_LEFT]):
             self.movement[0] -= 2
         
         # Jump
-        if self.input.anyKeyPressed([pygame.K_w, pygame.K_SPACE, pygame.K_UP]):
+        if self.input.get_keyboard().any_key_pressed([pygame.K_w, pygame.K_SPACE, pygame.K_UP]):
             self.player.vel[1] = -constant.JUMP_HEIGHT
 
         ## Location updating
@@ -110,15 +121,13 @@ class GameScreen(Screen):
 
 class EditorScreen(Screen):
     def __init__(self, game: "game.Game", screen_size: tuple[int, int] = constant.GAME_SIZE):
-        super().__init__(game, screen_size)
+        super().__init__(game=game, screen_size=screen_size)
 
         ### Setup
-        self.RENDER_SCALE = 2.0
-        
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
         # Assets
-        self.game.assets = {  # Be careful with photos that contain a lot of black: Black is CHROMA KEYED OUT for transparency
+        self.assets = {
             "decor": load_images("tiles/decor"),
             "large_decor": load_images("tiles/large_decor"),
             "stone": load_images("tiles/stone"),
@@ -132,7 +141,7 @@ class EditorScreen(Screen):
         self.tile_group = 0
         self.tile_variant = 0
 
-        # Camera offset
+        # Camera movement
         self.scroll = [0, 0]
         self.movement = [0, 0]
 
@@ -156,6 +165,10 @@ class EditorScreen(Screen):
 
         current_tile_img = self.game.assets[self.tile_list[self.tile_group]][self.tile_variant]
         current_tile_img.set_alpha(100)
+
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = (mouse_pos[0] / self.get_render_scale(), mouse_pos[1] / self.get_render_scale())
+        tile_pos = ((mouse_pos[0] + self.scroll[0]) // self.tilemap.tile_size, (mouse_pos[1] + self.scroll[1])  // self.tilemap.tile_size)
         
         current_tile_img: pygame.Surface
         if self.input.get_keyboard().any_key_down([pygame.K_LSHIFT, pygame.K_RSHIFT]):

@@ -1,7 +1,32 @@
 import pygame
-from scripts.utils import Animation
+from scripts.tilemap import Tilemap
 import constant
 import game
+
+
+class Animation:
+    def __init__(self, images: list[pygame.Surface], frame_duration: int = 5, looping: bool = True):
+        self.images = images
+        self.looping = looping
+        self.duration = frame_duration
+        self.finished = False
+        self.frame = 0
+    
+
+    def copy(self) -> "Animation":
+        return Animation(self.images, self.duration, self.looping)
+    
+    def update(self):
+        if self.looping:
+            self.frame = (self.frame + 1) % (self.duration * len(self.images))
+        else:
+            self.frame = min(self.frame + 1, self.duration * len(self.images) - 1)
+            if self.frame == self.duration * len(self.images) - 1:
+                self.finished = True
+
+    def get_image(self):
+        return self.images[int(self.frame / self.duration)]
+
 
 class PhysicsEntity():
     def __init__(self, game: "game.Game", type: str, pos: tuple[int, int], size: tuple[int, int]):
@@ -30,11 +55,11 @@ class PhysicsEntity():
     def set_action(self, action: str) -> None:
         if action != self.action:
             self.action = action
-            self.animation = self.game.assets[self.type + "/" + self.action].copy()
+            self.animation = self.game.get_assets()[self.type + "/" + self.action].copy()
 
 
 
-    def update(self, tilemap: "game.Tilemap", movement: tuple[int, int] = (0,0)) -> None:
+    def update(self, tilemap: Tilemap, movement: tuple[int, int] = (0,0)) -> None:
         dif_pos = (movement[0] + self.vel[0], movement[1] + self.vel[1])
         self.collision_direction = {"up": False, "down": False, "left": False, "right": False}
 
@@ -88,10 +113,9 @@ class PlayerEntity(PhysicsEntity):
     def __init__(self, game: "game.Game", pos: tuple[int, int], size: tuple[int, int]):
         super().__init__(game, "player", pos, size)
         self.air_time = 0
-        pass
 
 
-    def update(self, tilemap: "game.Tilemap", movement: tuple[int, int] = (0,0)) -> None:
+    def update(self, tilemap: "Tilemap", movement: tuple[int, int] = (0,0)) -> None:
         super().update(tilemap, movement)
 
         self.air_time += 1

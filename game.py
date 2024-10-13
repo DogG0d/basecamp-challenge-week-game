@@ -11,8 +11,9 @@ import constant
 from constant import *
 from inputstream import InputStream
 # Game scripts
-from scripts.utils import Animation
+from scripts.entities import Animation
 from scripts.screens import Screen, GameScreen, EditorScreen
+from scripts.utils import load_assets
 
 class Game():
     def __init__(self) -> None:
@@ -33,8 +34,8 @@ class Game():
         self.input = InputStream()
 
         # Assets
-        self.assets = {}
-        self.assets: pygame.Surface | list[pygame.Surface] | Animation
+        self.assets = load_assets("assets.json")
+        self.assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]
 
         # Game screens
         self.screens = {}
@@ -46,7 +47,7 @@ class Game():
             "editor": EditorScreen(game=self)
             })
         
-        self.current_screen = self.screens.get("editor")
+        self.current_screen = self.screens.get("game")
 
         
     def run(self):
@@ -89,8 +90,8 @@ class Game():
             self.clock.tick(constant.FRAMES_PER_SECOND)
     
 
-    def get_assets(self) -> dict[str, pygame.Surface]:
-        return self.assets
+    def get_assets(self) -> dict[str, pygame.Surface | list[pygame.Surface] | Animation]:
+        return dict(self.current_screen.get_assets())
     
 
     def get_entities(self) -> list:

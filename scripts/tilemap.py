@@ -19,7 +19,7 @@ class Tilemap():
     
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
         tiles = []
-        tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        tile_loc = (pos[0] // self.tile_size, pos[1] // self.tile_size)
         for offset in NEIGHBOUR_OFFSETS:
             if (check_loc := f"{tile_loc[0] + offset[0]};{tile_loc[1] + offset[1]}") in self.tilemap:
                 tiles.append(self.tilemap[check_loc])

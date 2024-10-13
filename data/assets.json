@@ -1,0 +1,12 @@
+{
+  "version": 1.0,
+  "assets": {
+    "name": {
+      "path": "abc/abc",
+      "type": "animation|file|folder",
+      "frame_duration": 5,
+      "looping": true
+    },
+    "object 2": {}
+  }
+}
