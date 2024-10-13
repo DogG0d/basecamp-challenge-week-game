@@ -11,79 +11,48 @@ import constant
 from constant import *
 from inputstream import InputStream
 # Game scripts
-from scripts.utils import load_image, load_images
-from scripts.tilemap import Tilemap
-from scripts.entities import PhysicsEntity
-from scripts.clouds import Clouds
+from scripts.utils import Animation
+from scripts.screens import Screen, GameScreen, EditorScreen
 
 class Game():
     def __init__(self) -> None:
         pygame.init()
-        # pygame.font.init()
 
-        ### Setup
+        ### Main Setup
+        self.BASE_TITLE = "Challengeweek - Name Unknown"
+
         # Game clock
         self.clock = pygame.time.Clock()
 
         # Game window
         self.display = pygame.display.set_mode(DISPLAY_SIZE)
         self.is_full_screen = False
-        pygame.display.set_caption("Challangeweek - Name Unknown")
+        pygame.display.set_caption(self.BASE_TITLE)
 
-        # Game surface
-        self.screen = pygame.Surface(constant.GAME_SIZE)
-
-        # Assets
-        self.assets = {  # Be careful with photos that contain a lot of black: Black is CHROMA KEYED OUT for transparency
-            "player": load_image("entities/player.png"),
-            "decor": load_images("tiles/decor"),
-            "large_decor": load_images("tiles/large_decor"),
-            "stone": load_images("tiles/stone"),
-            "grass": load_images("tiles/grass"),
-            "clouds": load_images("clouds")
-        }
-
-        # Tilemap
-        self.tilemap = Tilemap(self, tile_size=16)
-        
-        # Entities
-        self.player = PhysicsEntity(self, "player", (50, 50), (8, 15))
-
-        # Clouds
-        self.clouds = Clouds(self.assets["clouds"], count=16)
-
-        # Input stream
+        # Game input
         self.input = InputStream()
 
-        # Camera offset
-        self.scroll = [0, 0]
-    
+        # Assets
+        self.assets = {}
+        self.assets: pygame.Surface | list[pygame.Surface] | Animation
 
+        # Game screens
+        self.screens = {}
+        self.screens: dict[str, Screen]
+        self.current_screen: Screen | GameScreen
+        
+        self.screens.update({
+            "game": GameScreen(game=self),
+            "editor": EditorScreen(game=self)
+            })
+        
+        self.current_screen = self.screens.get("editor")
+
+        
     def run(self):
         while True:
-            ### START Game rendering
-
-            # Camera scroll
-            self.scroll[0] += (self.player.copy_rect().centerx - self.screen.get_width() / 2 - self.scroll[0]) / 30
-            self.scroll[1] += (self.player.copy_rect().centery - self.screen.get_height() / 2 - self.scroll[1]) / 30
-            render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
-
-            # Reset screen
-            self.screen.fill(RGB.SKY_BLUE)
-
-            # Clouds
-            self.clouds.update()
-            self.clouds.render(self.screen, render_scroll)
-
-            # Tilemap
-            self.tilemap.render(surf=self.screen, offset=render_scroll)
-
-            # Entities
-            self.player.render(surf=self.screen, offset=render_scroll)
-
-            # HUD
-
-            ### END Game rendering
+            ### Current screen render logic
+            self.current_screen.render()
 
             ### Event grabbing
             events = pygame.event.get()
@@ -91,47 +60,28 @@ class Game():
             ### Update keypresses
             self.input.process_input(events)
 
-            ### Event handling
+            ### Event & keypress handling
 
             # Quit
             if self.input.get_keyboard().is_key_pressed(pygame.K_q) or list(filter(lambda event: event.type == pygame.QUIT, events)):
                 pygame.quit()
                 sys.exit()
-            
-            ### Keypress handling
 
             # Resize
             if self.input.get_keyboard().is_key_pressed(pygame.K_F11):
                 if self.is_full_screen:
-                    pygame.display.set_mode(pygame.display.get_window_size(), 0)
-                    pygame.display.set_mode(constant.DISPLAY_SIZE, 0)
+                    pygame.display.set_mode(pygame.display.get_window_size())
+                    pygame.display.set_mode(constant.DISPLAY_SIZE)
                     self.is_full_screen = False
                 else:
                     pygame.display.set_mode(pygame.display.get_desktop_sizes()[0], pygame.FULLSCREEN)
                     self.is_full_screen = True
             
-            ## Player move
-            move_x = move_y = 0
-
-            # Walk right
-            if self.input.isKeyDown(pygame.K_d) or self.input.isKeyDown(pygame.K_RIGHT):
-                move_x += 2
-            
-            # Walk left
-            if self.input.isKeyDown(pygame.K_a) or self.input.isKeyDown(pygame.K_LEFT):
-                move_x -= 2
-            
-            # Jump
-            if self.input.isKeyPressed(pygame.K_SPACE) or self.input.isKeyPressed(pygame.K_UP) or self.input.isKeyPressed(pygame.K_w):
-                self.player.vel[1] = -constant.JUMP_HEIGHT
-
-            ### Location updating
-
-            self.player.update(self.tilemap, (move_x, move_y))
-
+            ### Current screen update logic
+            self.current_screen.update()
 
             # FINAL Updating display
-            self.display.blit(pygame.transform.scale(self.screen, self.display.get_size()), (0, 0))
+            self.display.blit(pygame.transform.scale(self.current_screen.get_screen(), self.display.get_size()), (0, 0))
 
             pygame.display.update()
 
