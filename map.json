@@ -1,7 +1,22 @@
 {
-  "name": "Main",
-  "size": {
-    "height": 100,
-    "width": 300
+  "name": "The Dark Undergrounds",
+  "constants": {
+    "gravitation": 0.1
+  },
+  "background_mapping": {
+    "layer_1": {
+      "opacity": 1,
+      "parallax": true,
+      "depth": 10,
+      "speed": {
+        "x": 1,
+        "y": 1
+      }
+    }
+  },
+  "tilemap": {
+    "tile_size": 16,
+    "on_grid": {},
+    "off_gridd": {}
   }
 }
