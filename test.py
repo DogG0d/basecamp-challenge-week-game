@@ -72,7 +72,7 @@ while running:
             running = False
     
     ### Handle keypresses
-    input.processInput()  # Update keyboard state
+    input.process_input()  # Update keyboard state
     
     # Full Screen
     # if input.isKeyPressed(K_F11):
