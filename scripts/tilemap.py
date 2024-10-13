@@ -12,9 +12,10 @@ class Tilemap():
         self.offgrid_tiles = []
         self.game
 
-        for i in range(10):
-            self.tilemap[f"{3 + i};10"] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
-            self.tilemap[f"10;{5 + i}"] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
+        ### Test map generator
+        # for i in range(10):
+        #     self.tilemap[f"{3 + i};10"] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
+        #     self.tilemap[f"10;{5 + i}"] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
     
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
         tiles = []
@@ -44,5 +45,3 @@ class Tilemap():
                 if loc in self.tilemap:
                     tile = self.tilemap[loc]
                     surf.blit(self.game.get_assets()[tile["type"]][tile["variant"]], (tile["pos"][0] * self.tile_size - offset[0], tile["pos"][1] * self.tile_size - offset[1]))
-            
-
