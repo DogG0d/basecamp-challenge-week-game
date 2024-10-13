@@ -11,10 +11,20 @@ class Direction:
   RIGHT = 2
 
 
-
 class PlayerState:
    IDLE = 0
    MOVING = 1
+
+
+class Mouse:
+  LEFT = 1
+  MIDDLE = 2
+  RIGHT = 3
+  FORWARD = 4
+  BACKWARD = 5
+  SCROLL_UP = -1
+  SCROLL_DOWN = -2
+
 
 # Screen
 DISPLAY_SIZE = (864, 486)
@@ -23,7 +33,7 @@ GAME_SIZE = (432, 243)
 FRAMES_PER_SECOND = 60
 
 # Logic
-GRAVITY = .1
+GRAVITY = 0.1
 MAX_FALL_SPEED = 12
 
 ### Player

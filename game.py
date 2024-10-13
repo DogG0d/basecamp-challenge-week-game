@@ -90,19 +90,19 @@ class Game():
             events = pygame.event.get()
             
             ### Update keypresses
-            self.input.processInput()
+            self.input.process_input(events)
 
             ### Event handling
 
             # Quit
-            if self.input.isKeyPressed(pygame.K_q) or list(filter(lambda event: event.type == pygame.QUIT, events)):
+            if self.input.get_keyboard().is_key_pressed(pygame.K_q) or list(filter(lambda event: event.type == pygame.QUIT, events)):
                 pygame.quit()
                 sys.exit()
             
             ### Keypress handling
 
             # Resize
-            if self.input.isKeyPressed(pygame.K_F11):
+            if self.input.get_keyboard().is_key_pressed(pygame.K_F11):
                 if self.is_full_screen:
                     pygame.display.set_mode(pygame.display.get_window_size(), 0)
                     pygame.display.set_mode(constant.DISPLAY_SIZE, 0)
