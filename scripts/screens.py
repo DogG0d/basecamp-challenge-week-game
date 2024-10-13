@@ -47,19 +47,7 @@ class GameScreen(Screen):
         pygame.display.set_caption(self.game.BASE_TITLE)
         
         # Assets
-        self.assets = {
-            "player": load_image("entities/player.png"),
-            "decor": load_images("tiles/decor"),
-            "large_decor": load_images("tiles/large_decor"),
-            "stone": load_images("tiles/stone"),
-            "grass": load_images("tiles/grass"),
-            "clouds": load_images("clouds"),
-            "player/idle": Animation(load_images("entities/player/idle"), 6),
-            "player/run": Animation(load_images("entities/player/run"), 4),
-            "player/jump": Animation(load_images("entities/player/jump")),
-            "player/slide": Animation(load_images("entities/player/slide")),
-            "player/wall_slide": Animation(load_images("entities/player/wall_slide"))
-        }
+        self.assets = self.game.get_assets()
 
         # Tilemap
         self.tilemap = Tilemap(self.game, tile_size=16)
@@ -69,7 +57,7 @@ class GameScreen(Screen):
         self.movement = [0, 0]
 
         # Clouds
-        self.clouds = Clouds(self.game.assets["clouds"], count=16)
+        self.clouds = Clouds(self.assets["clouds"], count=16)
 
         # Camera offset
         self.scroll = [0, 0]
@@ -127,12 +115,7 @@ class EditorScreen(Screen):
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
         # Assets
-        self.assets = {
-            "decor": load_images("tiles/decor"),
-            "large_decor": load_images("tiles/large_decor"),
-            "stone": load_images("tiles/stone"),
-            "grass": load_images("tiles/grass")
-        }
+        self.assets = self.game.get_assets()
 
         # Tilemap
         self.tilemap = Tilemap(self.game, tile_size=16)

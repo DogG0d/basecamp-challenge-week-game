@@ -39,7 +39,7 @@ def load_assets(path: str) -> dict[str, pygame.Surface | list[pygame.Surface] | 
     with open(BASE_PATH + path, "r") as file:
         data = json.load(file)
         for asset in data["assets"]:
-            properties = assets[asset]
+            properties = data["assets"][asset]
             match properties["type"]:
                 case "animation":
                     assets.update({asset: Animation(load_images(properties["path"]), properties["frame_duration"], properties["looping"])})
@@ -47,6 +47,9 @@ def load_assets(path: str) -> dict[str, pygame.Surface | list[pygame.Surface] | 
                     assets.update({asset: load_images(properties["path"])})
                 case "file":
                     assets.update({asset: load_image(properties["path"])})
+                case _:
+                    raise Exception(f"Asset named \"{properties["type"]}\" is invalid.")
+    
     
     return assets
 

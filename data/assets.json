@@ -1,12 +1,55 @@
 {
   "version": 1.0,
   "assets": {
-    "name": {
-      "path": "abc/abc",
-      "type": "animation|file|folder",
+    "player/idle": {
+      "path": "entities/player/idle",
+      "type": "animation",
+      "frame_duration": 6,
+      "looping": true
+    },
+    "player/run": {
+      "path": "entities/player/run",
+      "type": "animation",
+      "frame_duration": 4,
+      "looping": true
+    },
+    "player/jump": {
+      "path": "entities/player/jump",
+      "type": "animation",
       "frame_duration": 5,
       "looping": true
     },
-    "object 2": {}
+    "player/slide": {
+      "path": "entities/player/slide",
+      "type": "animation",
+      "frame_duration": 5,
+      "looping": true
+    },
+    "player/wall_slide": {
+      "path": "entities/player/wall_slide",
+      "type": "animation",
+      "frame_duration": 5,
+      "looping": true
+    },
+    "decor": {
+      "path": "tiles/decor",
+      "type": "folder"
+    },
+    "large_decor": {
+      "path": "tiles/large_decor",
+      "type": "folder"
+    },
+    "stone": {
+      "path": "tiles/stone",
+      "type": "folder"
+    },
+    "grass": {
+      "path": "tiles/grass",
+      "type": "folder"
+    },
+    "clouds": {
+      "path": "clouds",
+      "type": "folder"
+    }
   }
 }
