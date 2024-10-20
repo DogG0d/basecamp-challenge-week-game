@@ -13,6 +13,7 @@ class Screen:
         self.assets = {}
         self.screen_size = screen_size
         self.screen = pygame.Surface(screen_size)
+        self.render_queue = []
 
         ### Setup
         # Input stream
@@ -21,6 +22,10 @@ class Screen:
 
     def render(self) -> None:
         pass
+
+
+    def queue_render(self, surface) -> None:
+        self.render_queue += surface
 
 
     def update(self) -> None:
@@ -36,7 +41,10 @@ class Screen:
     
 
     def get_render_scale(self) -> float:
-        return constant.DISPLAY_SIZE / self.screen_size
+        if self.game.display.get_size()[0] / self.screen_size[0] == self.game.display.get_size()[1] / self.screen_size[1]:
+            return self.game.display.get_size()[0] / self.screen_size[0]
+        else:
+            raise Exception("Screen to display ratio out of sync -> Render scale unavailable")
         
 
 class GameScreen(Screen):
@@ -114,19 +122,17 @@ class EditorScreen(Screen):
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
-        # Assets
-        self.assets = self.game.get_assets()
-
         # Tilemap
         self.tilemap = Tilemap(self.game, tile_size=16)
         
-        self.tile_list = list(self.game.assets)
+        self.tile_list = ["stone", "grass", "decor", "large_decor"]
         self.tile_group = 0
         self.tile_variant = 0
 
-        # Camera movement
+        # Camera
         self.scroll = [0, 0]
-        self.movement = [0, 0]
+        self.zoom = 0.5
+    
 
     def render(self):
         # Camera scroll
@@ -143,10 +149,7 @@ class EditorScreen(Screen):
     
 
     def update(self):
-        ## Screen move
-        self.movement = [0, 0]
-
-        current_tile_img = self.game.assets[self.tile_list[self.tile_group]][self.tile_variant]
+        current_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
         current_tile_img.set_alpha(100)
 
         mouse_pos = pygame.mouse.get_pos()
@@ -159,6 +162,11 @@ class EditorScreen(Screen):
                 self.tile_variant = (self.tile_variant - 1) % len(self.game.assets[self.tile_list[self.tile_group]])
             if self.input.get_mouse().is_scrolling_down():
                 self.tile_variant = (self.tile_variant + 1) % len(self.game.assets[self.tile_list[self.tile_group]])
+        elif self.input.get_keyboard().any_key_down([pygame.K_LCTRL, pygame.K_RCTRL]):
+            if self.input.get_mouse().is_scrolling_up():
+                self.zoom += 0.25
+            if self.input.get_mouse().is_scrolling_down():
+                self.zoom -= 0.25
         else:
             if self.input.get_mouse().is_scrolling_up():
                 self.tile_group = (self.tile_group - 1) % len(self.tile_list)
@@ -167,26 +175,22 @@ class EditorScreen(Screen):
                 self.tile_group = (self.tile_group + 1) % len(self.tile_list)
                 self.tile_variant = 0
         
-        self.screen.blit(current_tile_img, (5, 5))
-
-
-
-
+        self.screen.blit(current_tile_img, (tile_pos[0] * self.tilemap.tile_size - self.scroll[0], tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))
 
         # Move right
         if self.input.get_keyboard().any_key_down([pygame.K_d, pygame.K_RIGHT]):
-            self.movement[0] += 2
+            self.scroll[0] += 2
         
         # Walk left
         if self.input.get_keyboard().any_key_down([pygame.K_a, pygame.K_LEFT]):
-            self.movement[0] -= 2
+            self.scroll[0] -= 2
         
         # Walk down
         if self.input.get_keyboard().any_key_down([pygame.K_s, pygame.K_DOWN]):
-            self.movement[1] += 2
+            self.scroll[1] += 2
         
         # Walk up
         if self.input.get_keyboard().any_key_down([pygame.K_w, pygame.K_UP]):
-            self.movement[1] -= 2
+            self.scroll[1] -= 2
 
-        ## Location updating
+

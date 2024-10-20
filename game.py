@@ -47,13 +47,19 @@ class Game():
             "game": GameScreen(game=self)
             })
         
-        self.current_screen = self.screens.get("game")
+        self.current_screen = self.screens.get("editor")
 
         
     def run(self):
-        while True:
+        ### First frame
+        pygame.display.update()
 
-            ### Event grabbing
+        while True:
+            ### Current screen render logic
+            self.current_screen.render()
+            pygame.display.update()
+
+            ### Events collection
             events = pygame.event.get()
             
             ### Update keypresses
@@ -75,17 +81,13 @@ class Game():
                 else:
                     pygame.display.set_mode(pygame.display.get_desktop_sizes()[0], pygame.FULLSCREEN)
                     self.is_full_screen = True
-            
+
             ### Current screen update logic
             self.current_screen.update()
-
-            ### Current screen render logic
-            self.current_screen.render()
 
             # FINAL Updating display
             self.display.blit(pygame.transform.scale(self.current_screen.get_screen(), self.display.get_size()), (0, 0))
 
-            pygame.display.update()
 
             ### Game clock update
             self.clock.tick(constant.FRAMES_PER_SECOND)
