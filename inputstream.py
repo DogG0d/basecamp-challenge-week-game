@@ -18,7 +18,7 @@ class Keyboard:
         return self.current_key_states[keyCode] == True
     
 
-    def any_key_down(self, keycodes: list):
+    def any_key_down(self, *keycodes):
         return any(self.is_key_down(keycode) for keycode in keycodes)
     
     
@@ -32,7 +32,7 @@ class Keyboard:
         return self.current_key_states[keyCode] == True and self.previous_key_states[keyCode] == False
     
 
-    def any_key_pressed(self, keycodes: list):
+    def any_key_pressed(self, *keycodes):
         return any(self.is_key_pressed(keycode) for keycode in keycodes)
     
     
@@ -54,22 +54,27 @@ class Mouse:
         self.previous_key_states = self.current_key_states
         self.current_key_states = pygame.mouse.get_pressed(5)
         self.events = [event for event in events if event.type in [pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION, pygame.MOUSEWHEEL]]
+        self.pos = pygame.mouse.get_pos()
 
         self.events: list[pygame.event.Event]
     
+
+    def get_pos(self) -> tuple[int, int]:
+        return self.pos
     
-    def isKeyDown(self, keyCode: Mouse) -> bool:
+    
+    def is_key_down(self, keyCode: Mouse) -> bool:
         if self.current_key_states is None:
             return False
         return self.current_key_states[keyCode] == True
     
 
-    def anyKeyDown(self, keycodes: list[Mouse]):
-        return any(self.isKeyDown(keycode) for keycode in keycodes)
+    def any_key_down(self, *keycodes: Mouse):
+        return any(self.is_key_down(keycode) for keycode in keycodes)
     
     
-    def isKeyPressed(self, keyCode: Mouse) -> bool:
-        if self.current_key_states is None or self.previous_key_states is None:
+    def is_key_pressed(self, keyCode: Mouse) -> bool:
+        if self.previous_key_states is None:
             if self.current_key_states is None:
                 return False
             else:
@@ -77,11 +82,11 @@ class Mouse:
         return self.current_key_states[keyCode] == True and self.previous_key_states[keyCode] == False
     
 
-    def anyKeyPressed(self, keycodes: list[Mouse]) -> bool:
-        return any(self.isKeyPressed(keycode) for keycode in keycodes)
+    def any_key_pressed(self, *keycodes: Mouse) -> bool:
+        return any(self.is_key_pressed(keycode) for keycode in keycodes)
     
     
-    def isKeyReleased(self, keyCode: Mouse) -> bool:
+    def is_key_released(self, keyCode: Mouse) -> bool:
         if self.current_key_states is None or self.previous_key_states is None:
             return False
         return self.current_key_states[keyCode] == False and self.previous_key_states[keyCode] == True

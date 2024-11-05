@@ -17,11 +17,11 @@ class PlayerState:
 
 
 class Mouse:
-  LEFT = 1
-  MIDDLE = 2
-  RIGHT = 3
-  FORWARD = 4
-  BACKWARD = 5
+  LEFT = 0
+  MIDDLE = 1
+  RIGHT = 2
+  BACKWARD = 4
+  FORWARD = 5
   SCROLL_UP = -1
   SCROLL_DOWN = -2
 

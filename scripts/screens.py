@@ -99,15 +99,15 @@ class GameScreen(Screen):
         self.movement = [0, 0]
 
         # Walk right
-        if self.input.get_keyboard().any_key_down([pygame.K_d, pygame.K_RIGHT]):
+        if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
             self.movement[0] += 2
         
         # Walk left
-        if self.input.get_keyboard().any_key_down([pygame.K_a, pygame.K_LEFT]):
+        if self.input.get_keyboard().any_key_down(pygame.K_a, pygame.K_LEFT):
             self.movement[0] -= 2
         
         # Jump
-        if self.input.get_keyboard().any_key_pressed([pygame.K_w, pygame.K_SPACE, pygame.K_UP]):
+        if self.input.get_keyboard().any_key_pressed(pygame.K_w, pygame.K_SPACE, pygame.K_UP):
             self.player.vel[1] = -constant.JUMP_HEIGHT
 
         ## Location updating
@@ -152,17 +152,17 @@ class EditorScreen(Screen):
         current_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
         current_tile_img.set_alpha(100)
 
-        mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = self.input.get_mouse().get_pos()
         mouse_pos = (mouse_pos[0] / self.get_render_scale(), mouse_pos[1] / self.get_render_scale())
         tile_pos = ((mouse_pos[0] + self.scroll[0]) // self.tilemap.tile_size, (mouse_pos[1] + self.scroll[1])  // self.tilemap.tile_size)
         
         current_tile_img: pygame.Surface
-        if self.input.get_keyboard().any_key_down([pygame.K_LSHIFT, pygame.K_RSHIFT]):
+        if self.input.get_keyboard().any_key_down(pygame.K_LSHIFT, pygame.K_RSHIFT):
             if self.input.get_mouse().is_scrolling_up():
                 self.tile_variant = (self.tile_variant - 1) % len(self.game.assets[self.tile_list[self.tile_group]])
             if self.input.get_mouse().is_scrolling_down():
                 self.tile_variant = (self.tile_variant + 1) % len(self.game.assets[self.tile_list[self.tile_group]])
-        elif self.input.get_keyboard().any_key_down([pygame.K_LCTRL, pygame.K_RCTRL]):
+        elif self.input.get_keyboard().any_key_down(pygame.K_LCTRL, pygame.K_RCTRL):
             if self.input.get_mouse().is_scrolling_up():
                 self.zoom += 0.25
             if self.input.get_mouse().is_scrolling_down():
@@ -178,19 +178,19 @@ class EditorScreen(Screen):
         self.screen.blit(current_tile_img, (tile_pos[0] * self.tilemap.tile_size - self.scroll[0], tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))
 
         # Move right
-        if self.input.get_keyboard().any_key_down([pygame.K_d, pygame.K_RIGHT]):
+        if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
             self.scroll[0] += 2
         
         # Walk left
-        if self.input.get_keyboard().any_key_down([pygame.K_a, pygame.K_LEFT]):
+        if self.input.get_keyboard().any_key_down(pygame.K_a, pygame.K_LEFT):
             self.scroll[0] -= 2
         
         # Walk down
-        if self.input.get_keyboard().any_key_down([pygame.K_s, pygame.K_DOWN]):
+        if self.input.get_keyboard().any_key_down(pygame.K_s, pygame.K_DOWN):
             self.scroll[1] += 2
         
         # Walk up
-        if self.input.get_keyboard().any_key_down([pygame.K_w, pygame.K_UP]):
+        if self.input.get_keyboard().any_key_down(pygame.K_w, pygame.K_UP):
             self.scroll[1] -= 2
 
 
