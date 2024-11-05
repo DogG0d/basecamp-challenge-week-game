@@ -1,8 +1,5 @@
-# Python 3.12.6
-
 # Locals
 import sys
-import os
 # import time
 # Game engine
 import pygame
@@ -92,14 +89,9 @@ class Game():
             # FINAL Updating display
             self.display.blit(pygame.transform.scale(self.current_screen.get_screen(), self.display.get_size()), (0, 0))
 
-
             ### Game clock update
             self.clock.tick(constant.FRAMES_PER_SECOND)
     
 
     def get_assets(self) -> dict[str, pygame.Surface | list[pygame.Surface] | Animation]:
         return self.assets
-    
-
-    def get_entities(self) -> list:
-        pass
