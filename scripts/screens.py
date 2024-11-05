@@ -187,6 +187,9 @@ class EditorScreen(Screen):
                 self.tile_group = (self.tile_group + 1) % len(self.tile_list)
                 self.tile_variant = 0
 
+        if self.input.get_mouse().is_key_down(constant.Mouse.LEFT):
+            self.tilemap.add_tile(mouse_pos, self.scroll, self.tile_list[self.tile_group], self.tile_variant)
+
         # Move right
         if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
             self.scroll[0] += 2
