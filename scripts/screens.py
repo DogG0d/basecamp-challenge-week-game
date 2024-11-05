@@ -125,9 +125,18 @@ class EditorScreen(Screen):
         # Tilemap
         self.tilemap = Tilemap(self.game, tile_size=16)
         
+        self.current_tile_pos = (0, 0)
+
         self.tile_list = ["stone", "grass", "decor", "large_decor"]
         self.tile_group = 0
         self.tile_variant = 0
+
+        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img.set_alpha(100)
+
+        # HUD
+        self.hud = pygame.Surface((320, 32))
+        self.hud.fill(RGB.ORANGE)
 
         # Camera
         self.scroll = [0, 0]
@@ -144,19 +153,22 @@ class EditorScreen(Screen):
         # Tilemap
         self.tilemap.render(surf=self.screen, offset=render_scroll)
 
+        # Selector
+        self.screen.blit(self.selected_tile_img, (self.current_tile_pos[0] * self.tilemap.tile_size - self.scroll[0], self.current_tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))
+
         # HUD
         ...
     
 
     def update(self):
-        current_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
-        current_tile_img.set_alpha(100)
+        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img.set_alpha(100)
 
         mouse_pos = self.input.get_mouse().get_pos()
         mouse_pos = (mouse_pos[0] / self.get_render_scale(), mouse_pos[1] / self.get_render_scale())
-        tile_pos = ((mouse_pos[0] + self.scroll[0]) // self.tilemap.tile_size, (mouse_pos[1] + self.scroll[1])  // self.tilemap.tile_size)
+        self.current_tile_pos = ((mouse_pos[0] + self.scroll[0]) // self.tilemap.tile_size, (mouse_pos[1] + self.scroll[1])  // self.tilemap.tile_size)
         
-        current_tile_img: pygame.Surface
+        self.selected_tile_img: pygame.Surface
         if self.input.get_keyboard().any_key_down(pygame.K_LSHIFT, pygame.K_RSHIFT):
             if self.input.get_mouse().is_scrolling_up():
                 self.tile_variant = (self.tile_variant - 1) % len(self.game.assets[self.tile_list[self.tile_group]])
@@ -174,8 +186,6 @@ class EditorScreen(Screen):
             if self.input.get_mouse().is_scrolling_down():
                 self.tile_group = (self.tile_group + 1) % len(self.tile_list)
                 self.tile_variant = 0
-        
-        self.screen.blit(current_tile_img, (tile_pos[0] * self.tilemap.tile_size - self.scroll[0], tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))
 
         # Move right
         if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
