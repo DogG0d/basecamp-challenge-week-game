@@ -8,15 +8,6 @@ BASE_PATH = "data/"
 IMAGE_PATH = BASE_PATH + "images/"
 
 
-class JSON_ENCODER:
-    def json_to_tuple() -> tuple:
-        pass
-
-
-    def tuple_to_json() -> str:
-        pass
-
-
 def load_image(path: str) -> pygame.Surface | None:
     try:
         returnable = pygame.image.load(IMAGE_PATH + path).convert()
@@ -59,3 +50,12 @@ def save_assets(path: str, assets: dict[str, pygame.Surface | list[pygame.Surfac
     if path in os.listdir(BASE_PATH):
         with open(path) as file:
             data = json.load
+
+
+def loc_from_json(loc: str) -> tuple[int, int]:
+    x, y = map(int, loc.split(','))
+    return (x, y)
+
+
+def loc_to_json(loc: tuple[int, int]) -> str:
+    return f"{loc[0]},{loc[1]}"

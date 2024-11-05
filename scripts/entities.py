@@ -1,5 +1,5 @@
 import pygame
-from scripts.tilemap import Tilemap
+from scripts.map import Tilemap
 import constant
 import game
 

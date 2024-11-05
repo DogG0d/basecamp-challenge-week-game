@@ -11,6 +11,7 @@ import constant
 from constant import *
 from inputstream import InputStream
 # Game scripts
+from scripts.map import Map
 from scripts.entities import Animation
 from scripts.screens import Screen, GameScreen, EditorScreen
 from scripts.utils import load_assets
@@ -37,17 +38,17 @@ class Game():
         self.assets = load_assets("assets.json")
         self.assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]
 
+
+        # Maps
+        self.maps = {
+            0: Map("Main", self)
+        }
+
         # Game screens
-        self.screens = {}
-        self.screens: dict[str, Screen]
         self.current_screen: Screen | GameScreen
         
-        self.screens.update({
-            "editor": EditorScreen(game=self),
-            "game": GameScreen(game=self)
-            })
         
-        self.current_screen = self.screens.get("editor")
+        self.current_screen = self.editor_screen
 
         
     def run(self):

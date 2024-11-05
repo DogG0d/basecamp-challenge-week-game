@@ -3,7 +3,7 @@
   "constants": {
     "gravitation": 0.1
   },
-  "background_mapping": {
+  "background": {
     "layer_1": {
       "opacity": 1,
       "parallax": true,
@@ -17,6 +17,6 @@
   "tilemap": {
     "tile_size": 16,
     "on_grid": {},
-    "off_gridd": {}
+    "off_grid": {}
   }
 }
