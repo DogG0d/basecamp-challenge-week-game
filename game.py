@@ -47,6 +47,9 @@ class Game():
         # Game screens
         self.current_screen: Screen | GameScreen
         
+        self.main_screen = None
+        self.game_screen = GameScreen(game=self)
+        self.editor_screen = EditorScreen(game=self)
         
         self.current_screen = self.editor_screen
 
