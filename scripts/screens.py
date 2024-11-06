@@ -157,7 +157,7 @@ class EditorScreen(Screen):
         self.screen.blit(self.selected_tile_img, (self.current_tile_pos[0] * self.tilemap.tile_size - self.scroll[0], self.current_tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))
 
         # HUD
-        ...
+        self.screen.blit(self.hud, (56, 16))
     
 
     def update(self):
