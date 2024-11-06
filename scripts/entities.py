@@ -1,7 +1,6 @@
 import pygame
-from scripts.map import Tilemap
+import scripts.map
 import constant
-import game
 
 
 class Animation:

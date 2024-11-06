@@ -1,5 +1,6 @@
 import pygame
 import json
+import scripts.entities
 from scripts.utils import loc_from_json, loc_to_json
 
 NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]

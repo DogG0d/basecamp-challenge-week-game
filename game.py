@@ -1,6 +1,5 @@
 # Locals
 import sys
-# import time
 # Game engine
 import pygame
 # Game logics

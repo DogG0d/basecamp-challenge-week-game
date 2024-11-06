@@ -2,7 +2,7 @@ import pygame
 import game
 from scripts.clouds import Clouds
 from scripts.entities import PlayerEntity
-from scripts.map import Tilemap
+from scripts.map import Map, Tilemap
 from scripts.utils import load_image, load_images, Animation
 import constant
 from constant import RGB
