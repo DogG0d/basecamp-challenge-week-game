@@ -58,10 +58,10 @@ class GameScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.tilemap = Tilemap(self.game, tile_size=16)
+        self.tilemap = Tilemap(tile_size=16)
         
         # Entities
-        self.player = PlayerEntity(self.game, (50, 50), (8, 15))
+        self.player = PlayerEntity(self.assets, (50, 50), (8, 15))
         self.movement = [0, 0]
 
         # Clouds
@@ -85,7 +85,7 @@ class GameScreen(Screen):
         self.clouds.render(self.screen, render_scroll)
 
         # Tilemap
-        self.tilemap.render(surf=self.screen, offset=render_scroll)
+        self.tilemap.render(surf=self.screen, assets=self.assets, offset=render_scroll)
 
         # Entities
         self.player.render(surf=self.screen, offset=render_scroll)
@@ -123,7 +123,8 @@ class EditorScreen(Screen):
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
         # Tilemap
-        self.tilemap = Tilemap(self.game, tile_size=16)
+        self.map = Map(name="Main", tilesize=16)
+        self.tilemap = self.map.tilemap
         
         self.current_tile_pos = (0, 0)
 
@@ -140,7 +141,7 @@ class EditorScreen(Screen):
 
         # Camera
         self.scroll = [0, 0]
-        self.zoom = 0.5
+        self.zoom = -1
     
 
     def render(self):
@@ -151,7 +152,7 @@ class EditorScreen(Screen):
         self.screen.fill(RGB.WHITE)
 
         # Tilemap
-        self.tilemap.render(surf=self.screen, offset=render_scroll)
+        self.tilemap.render(surf=self.screen, assets=self.assets, offset=render_scroll)
 
         # Selector
         self.screen.blit(self.selected_tile_img, (self.current_tile_pos[0] * self.tilemap.tile_size - self.scroll[0], self.current_tile_pos[1] * self.tilemap.tile_size - self.scroll[1]))

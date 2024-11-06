@@ -7,10 +7,9 @@ NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1
 PHYSICS_TILES = {"grass", "stone"}
 
 class Map():
-    def __init__(self, name: str, game, tilesize: int = 16) -> None:
+    def __init__(self, name: str, tilesize: int = 16) -> None:
         self.name = name
-        self.game = game
-        self.tilemap = Tilemap(self.game, tilesize)
+        self.tilemap = Tilemap(tilesize)
     
 
     def load(self, path):
@@ -66,16 +65,15 @@ class Map():
 
 
 class Tilemap():
-    def __init__(self, game, tile_size: int = 16):
-        self.game = game
+    def __init__(self, tile_size: int = 16):
         self.tile_size = tile_size
         self.tilemap = {}
         self.offgrid_tiles = []
 
         ### Test map generator
         for i in range(10):
-            self.tilemap[f"{3 + i};10"] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
-            self.tilemap[f"10;{5 + i}"] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
+            self.tilemap[(3 + i, 10)] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
+            self.tilemap[(10, 5 + i)] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
     
 
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
@@ -101,7 +99,7 @@ class Tilemap():
 
         if is_on_grid:
             tile_loc = (int(map_pos[0] // self.tile_size), int(map_pos[1] // self.tile_size))
-            self.tilemap[f'{tile_loc[0]};{tile_loc[1]}'] = {"type": tile_type, "variant": tile_variant, "pos": tile_loc}
+            self.tilemap[tile_loc] = {"type": tile_type, "variant": tile_variant, "pos": tile_loc}
         else:
             self.offgrid_tiles.append({"type": tile_type, "variant": tile_variant, "pos": map_pos})
     
@@ -110,17 +108,16 @@ class Tilemap():
         pass
 
 
-    def render(self, surf: pygame.Surface, offset: tuple[int, int] = (0,0), zoom: float = 0):
-        x_zoom_comp = -(surf.get_width() * zoom * 0.5)
-        y_zoom_comp = -(surf.get_height() * zoom * 0.5)
+    def render(self, surf: pygame.Surface, assets: dict[str, pygame.Surface | list[pygame.Surface] | scripts.entities.Animation], offset: tuple[int, int] = (0,0), zoom: float = 0):
+        x_zoom_comp = int(-(surf.get_width() * zoom * 0.5))
+        y_zoom_comp = int(-(surf.get_height() * zoom * 0.5))
 
         for tile in self.offgrid_tiles:
-            surf.blit(self.game.get_assets()[tile["type"]][tile["variant"]], (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]))
+            surf.blit(assets[tile["type"]][tile["variant"]], (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]))
 
         for tile_x in range(int((offset[0] + x_zoom_comp) // self.tile_size), int((offset[0] + surf.get_width() - x_zoom_comp) // self.tile_size) + 1):
             for tile_y in range(int((offset[1] + y_zoom_comp) // self.tile_size), int((offset[1] + surf.get_height() - y_zoom_comp) // self.tile_size) + 1):
-                loc = f"{tile_x};{tile_y}"
+                loc = (tile_x, tile_y)
                 if loc in self.tilemap:
                     tile = self.tilemap.get(loc)
-                    surf.blit(self.game.get_assets()[tile["type"]][tile["variant"]], (tile["pos"][0] * self.tile_size - offset[0], tile["pos"][1] * self.tile_size - offset[1]))
-    
+                    surf.blit(assets[tile["type"]][tile["variant"]], (tile["pos"][0] * self.tile_size - offset[0], tile["pos"][1] * self.tile_size - offset[1]))

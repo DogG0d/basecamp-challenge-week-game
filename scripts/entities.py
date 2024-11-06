@@ -28,8 +28,8 @@ class Animation:
 
 
 class PhysicsEntity():
-    def __init__(self, game: "game.Game", type: str, pos: tuple[int, int], size: tuple[int, int]):
-        self.game = game
+    def __init__(self, assets: dict[str, "pygame.Surface | list[pygame.Surface] | Animation"], type: str, pos: tuple[int, int], size: tuple[int, int]):
+        self.assets = assets
         self.type = type
         self.pos = list(pos)
         self.size = list(size)
@@ -54,10 +54,10 @@ class PhysicsEntity():
     def set_action(self, action: str) -> None:
         if action != self.action:
             self.action = action
-            self.animation = self.game.get_assets()[self.type + "/" + self.action].copy()
+            self.animation = self.assets[self.type + "/" + self.action].copy()
 
 
-    def update(self, tilemap: Tilemap, movement: tuple[int, int] = (0,0)) -> None:
+    def update(self, tilemap: "scripts.map.Tilemap", movement: tuple[int, int] = (0,0)) -> None:
         dif_pos = (movement[0] + self.vel[0], movement[1] + self.vel[1])
         self.collision_direction = {"up": False, "down": False, "left": False, "right": False}
 
@@ -108,12 +108,12 @@ class PhysicsEntity():
 
 
 class PlayerEntity(PhysicsEntity):
-    def __init__(self, game: "game.Game", pos: tuple[int, int], size: tuple[int, int]):
-        super().__init__(game, "player", pos, size)
+    def __init__(self, assets: dict[str, "pygame.Surface | list[pygame.Surface] | Animation"], pos: tuple[int, int], size: tuple[int, int]):
+        super().__init__(assets, "player", pos, size)
         self.air_time = 0
 
 
-    def update(self, tilemap: "Tilemap", movement: tuple[int, int] = (0,0)) -> None:
+    def update(self, tilemap: "scripts.map.Tilemap", movement: tuple[int, int] = (0,0)) -> None:
         super().update(tilemap, movement)
 
         self.air_time += 1
