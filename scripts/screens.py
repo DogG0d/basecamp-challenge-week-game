@@ -58,7 +58,8 @@ class GameScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.tilemap = Tilemap(tile_size=16)
+        self.map = Map("Main", 16, "data/maps/0.json")
+        self.tilemap = self.map.tilemap
         
         # Entities
         self.player = PlayerEntity(self.assets, (50, 50), (8, 15))
@@ -123,7 +124,7 @@ class EditorScreen(Screen):
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
         # Tilemap
-        self.map = Map(name="Main", tilesize=16)
+        self.map = Map(name="Main", tilesize=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
         
         self.current_tile_pos = (0, 0)
