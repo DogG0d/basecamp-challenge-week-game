@@ -19,28 +19,6 @@ class Map():
 
     def load(self, path) -> None:
         ## Load file
-    def save(self, path):
-        file = open(path, 'w')
-
-        # Encode tilemap
-        encoded_tilemap = dict()
-        for loc, tile in self.tilemap.tilemap.items():
-            encoded_tilemap[loc_to_json(loc)] = tile
-
-
-        json.dump({
-            "name": self.name,
-            "constants": self.constants,
-            "background": self.background,
-            "tilemap": {
-                "tilesize": self.tilemap.tile_size,
-                "on_grid": encoded_tilemap,
-                "off_grid": self.tilemap.offgrid_tiles
-            }
-        }, file)
-
-        file.close()
-
         if not os.path.exists(path):
             return
 
@@ -70,6 +48,25 @@ class Map():
             self.tilemap.tilemap = json_tilemap["on_grid"]
             self.tilemap.offgrid_tiles = json_tilemap["off_grid"]
 
+    def save(self, path) -> None:
+        with open(path, 'w') as file:
+            # Encode tilemap
+            encoded_tilemap = dict()
+            for loc, tile in self.tilemap.tilemap.items():
+                encoded_tilemap[loc_to_json(loc)] = tile
+
+
+            json.dump({
+                "name": self.name,
+                "constants": self.constants,
+                "background": self.background,
+                "tilemap": {
+                    "tile_size": self.tilemap.tile_size,
+                    "physics_types": self.tilemap.physics_types,
+                    "on_grid": encoded_tilemap,
+                    "off_grid": self.tilemap.offgrid_tiles
+                }
+            }, file)
 
 
 class Tilemap():
