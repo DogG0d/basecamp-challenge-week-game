@@ -78,9 +78,12 @@ class Tilemap():
         self.physics_types = ["grass", "stone"]
 
         ### Test map generator
-        for i in range(10):
-            self.tilemap[(3 + i, 10)] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
-            self.tilemap[(10, 5 + i)] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
+        # for i in range(10):
+        #     self.tilemap[(3 + i, 10)] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
+        #     self.tilemap[(10, 5 + i)] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
+        
+        # Middle block
+        self.tilemap[(0, 0)] = {"type": "stone", "variant": 1, "pos": (0, 0)}
     
 
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
