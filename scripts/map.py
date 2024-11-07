@@ -122,7 +122,6 @@ class Tilemap():
         tile_loc = (int((pos[0] + offset[0]) // self.tile_size), int((pos[1] + offset[1]) // self.tile_size))
         if tile_loc in self.tilemap:
             del self.tilemap[tile_loc]
-            print(f"{tile_loc} removed.")
     
 
     def highlight_tile(self) -> None:
