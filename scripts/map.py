@@ -19,32 +19,6 @@ class Map():
 
     def load(self, path) -> None:
         ## Load file
-        file = open(path, 'r')
-        map_data: dict[str, any | dict] = json.load(file) 
-        file.close()
-
-        ### Import map attributes
-        self.name = map_data["name"]
-        self.constants = map_data["constants"]
-        self.background = map_data["background"]
-        
-        json_tilemap: dict[str, int | list | dict] = map_data["tilemap"]
-
-        ## Decode tilemap
-        # On grid
-        for loc in json_tilemap["on_grid"]:
-            json_tilemap[loc_from_json(loc)] = json_tilemap["on_grid"].pop(loc)
-        
-        # Off grid
-        for loc in json_tilemap["off_grid"]:
-            loc["loc"] = tuple(loc["loc"])
-
-        # Import tilemap attributes
-        self.tilemap.tile_size = json_tilemap["tile_size"]
-        self.tilemap.tilemap = json_tilemap["on_grid"]
-        self.tilemap.offgrid_tiles = json_tilemap["off_grid"]
-
-
     def save(self, path):
         file = open(path, 'w')
 
@@ -69,6 +43,32 @@ class Map():
 
         if not os.path.exists(path):
             return
+
+
+        with open(path, 'r') as file:
+            map_data: dict[str, any | dict] = json.load(file)
+
+            ### Import map attributes
+            self.name = map_data["name"]
+            self.constants = map_data["constants"]
+            self.background = map_data["background"]
+            
+            json_tilemap: dict[str, int | list | dict] = map_data["tilemap"]
+
+            ## Decode tilemap
+            # On grid
+            for loc in json_tilemap["on_grid"]:
+                json_tilemap[loc_from_json(loc)] = json_tilemap["on_grid"].get(loc)
+            
+            # Off grid
+            for loc in json_tilemap["off_grid"]:
+                loc["loc"] = tuple(loc["loc"])
+
+            # Import tilemap attributes
+            self.tilemap.tile_size = json_tilemap["tile_size"]
+            self.tilemap.physics_types = json_tilemap["physics_types"]
+            self.tilemap.tilemap = json_tilemap["on_grid"]
+            self.tilemap.offgrid_tiles = json_tilemap["off_grid"]
 
 
 
