@@ -49,7 +49,7 @@ def load_assets(path: str) -> dict[str, pygame.Surface | list[pygame.Surface] | 
 def save_assets(path: str, assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]) -> None:
     if path in os.listdir(BASE_PATH):
         with open(path) as file:
-            data = json.load
+            data = json.load(file)
 
 
 def loc_from_json(loc: str) -> tuple[int, int]:
