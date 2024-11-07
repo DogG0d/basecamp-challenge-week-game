@@ -116,7 +116,9 @@ class Tilemap():
 
     def remove_tile(self, pos: tuple[int, int], offset: tuple[int, int]) -> None:
         tile_loc = (int((pos[0] + offset[0]) // self.tile_size), int((pos[1] + offset[1]) // self.tile_size))
-        self.tilemap.pop(tile_loc)
+        if tile_loc in self.tilemap:
+            del self.tilemap[tile_loc]
+            print(f"{tile_loc} removed.")
     
 
     def highlight_tile(self) -> None:
