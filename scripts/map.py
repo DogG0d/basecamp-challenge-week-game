@@ -5,7 +5,6 @@ import scripts.entities
 from scripts.utils import loc_from_json, loc_to_json
 
 NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
-PHYSICS_TILES = {"grass", "stone"}
 
 class Map():
     def __init__(self, name: str, tilesize: int = 16, path: str = None) -> None:
@@ -76,6 +75,7 @@ class Tilemap():
         self.tile_size = tile_size
         self.tilemap = {}
         self.offgrid_tiles = []
+        self.physics_types = ["grass", "stone"]
 
         ### Test map generator
         for i in range(10):
@@ -96,7 +96,7 @@ class Tilemap():
     def physics_rect_around(self, pos: tuple[int, int]) -> list[pygame.Rect]:
         rects = []
         for tile in self.get_tiles_around(pos):
-            if tile["type"] in PHYSICS_TILES:
+            if tile["type"] in self.physics_types:
                 rects.append(pygame.Rect(tile["pos"][0] * self.tile_size, tile["pos"][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
     
