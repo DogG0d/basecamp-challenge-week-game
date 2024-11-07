@@ -46,6 +46,8 @@ class PhysicsEntity():
         self.y_flip = False
         self.animation: Animation
         self.set_action("idle")
+
+        self.last_movement = [0, 0]
     
     def copy_rect(self):
         return pygame.Rect(*self.pos, *self.size)
@@ -91,6 +93,8 @@ class PhysicsEntity():
             self.x_flip = False
         elif movement[0] < 0:
             self.x_flip = True
+
+        self.last_movement = movement
 
 
         # Velocity
