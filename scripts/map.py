@@ -7,9 +7,12 @@ NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1
 PHYSICS_TILES = {"grass", "stone"}
 
 class Map():
-    def __init__(self, name: str, tilesize: int = 16) -> None:
+    def __init__(self, name: str, tilesize: int = 16, path: str = None) -> None:
         self.name = name
         self.tilemap = Tilemap(tilesize)
+        self.path = path
+        if path is not None:
+            self.load(path)
     
 
     def load(self, path):
