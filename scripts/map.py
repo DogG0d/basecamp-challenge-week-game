@@ -111,6 +111,11 @@ class Tilemap():
             self.offgrid_tiles.append({"type": tile_type, "variant": tile_variant, "pos": map_pos})
     
 
+    def remove_tile(self, pos: tuple[int, int], offset: tuple[int, int]) -> None:
+        tile_loc = (int((pos[0] + offset[0]) // self.tile_size), int((pos[1] + offset[1]) // self.tile_size))
+        self.tilemap.pop(tile_loc)
+    
+
     def highlight_tile(self) -> None:
         pass
 
