@@ -11,6 +11,8 @@ class Map():
         self.name = name
         self.tilemap = Tilemap(tilesize)
         self.path = path
+        self.constants = {}
+        self.background = {}
         if path is not None:
             self.load(path)
     
