@@ -104,7 +104,7 @@ class Tilemap():
         rects = []
         for tile in self.get_tiles_around(pos):
             if tile["type"] in self.physics_types:
-                rects.append(pygame.Rect(tile["pos"][0] * self.tile_size, tile["pos"][1] * self.tile_size, self.tile_size, self.tile_size))
+                rects.append(pygame.Rect(tile["loc"][0] * self.tile_size, tile["loc"][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
     
 
