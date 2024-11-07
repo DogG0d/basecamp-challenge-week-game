@@ -48,6 +48,7 @@ class Map():
             self.tilemap.tilemap = json_tilemap["on_grid"]
             self.tilemap.offgrid_tiles = json_tilemap["off_grid"]
 
+
     def save(self, path) -> None:
         with open(path, 'w') as file:
             # Encode tilemap
