@@ -50,6 +50,18 @@
     "clouds": {
       "path": "clouds",
       "type": "folder"
+    },
+    "leaf": {
+      "path": "particle/leaf",
+      "type": "particle",
+      "frame_duration": 5,
+      "looping": false
+    },
+    "particle": {
+      "path": "particle/particle",
+      "type": "particle",
+      "frame_duration": 5,
+      "looping": false
     }
   }
 }
