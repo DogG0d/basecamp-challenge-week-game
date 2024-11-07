@@ -111,6 +111,9 @@ class GameScreen(Screen):
         if self.input.get_keyboard().any_key_pressed(pygame.K_w, pygame.K_SPACE, pygame.K_UP):
             self.player.jump()
 
+        # dash
+        if self.input.get_keyboard().any_key_pressed(pygame.K_x):
+            self.player.dash()
 
         ## Location updating
 
