@@ -123,6 +123,9 @@ class EditorScreen(Screen):
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
+        # Assets
+        self.assets = self.game.get_assets()
+
         # Tilemap
         self.map = Map(name="Main", tilesize=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
@@ -133,7 +136,7 @@ class EditorScreen(Screen):
         self.tile_group = 0
         self.tile_variant = 0
 
-        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img = self.assets[self.tile_list[self.tile_group]][self.tile_variant].copy()
         self.selected_tile_img.set_alpha(100)
 
         # HUD
