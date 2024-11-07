@@ -115,6 +115,8 @@ class PlayerEntity(PhysicsEntity):
     def __init__(self, assets: dict[str, "pygame.Surface | list[pygame.Surface] | Animation"], pos: tuple[int, int], size: tuple[int, int]):
         super().__init__(assets, "player", pos, size)
         self.air_time = 0
+        self.jumps = 2
+        self.wall_slide = False
 
 
     def update(self, tilemap: "scripts.map.Tilemap", movement: tuple[int, int] = (0,0)) -> None:
@@ -123,10 +125,48 @@ class PlayerEntity(PhysicsEntity):
         self.air_time += 1
         if self.collision_direction["down"]:
             self.air_time = 0
+            self.jumps = 2
+            
         
-        if self.air_time > 4:
-            self.set_action("jump")
-        elif movement[0] != 0:
-            self.set_action("run")
+        if(self.collision_direction["right"] or self.collision_direction["left"]) and self.air_time > 4:
+            self.wall_slide = True
+            self.vel[1] = min(self.vel[1], 0.5)
+            if self.collision_direction["right"]:
+                self.flip = False
+            else:
+                self.flip = True
+
+            self.set_action("wall_slide")
         else:
-            self.set_action("idle")
+            self.wall_slide = False
+
+
+        if self.wall_slide == False:
+            if self.air_time > 4:
+                self.set_action("jump")
+            elif movement[0] != 0:
+                self.set_action("run")
+            else:
+                self.set_action("idle")
+
+        if self.vel[0] > 0:
+            self.vel[0] = max(self.vel[0] - 0.1, 0)
+        else:
+            self.vel[0] = min(self.vel[0] + 0.1, 0)
+        # TODO: Introduce constant
+
+
+
+    def jump(self):
+        if self.wall_slide:
+            if self.flip and self.last_movement[0] < 0:
+                self.vel[0] = 4
+                self.vel[1] = -2.5
+            elif not self.flip and self.last_movement[0] > 0:
+                self.vel[0] = -4
+                self.vel[1] = -2.5
+
+        elif self.jumps:
+            self.vel[1] = -3 
+            self.jumps -= 1
+            self.air_time = 5

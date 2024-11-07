@@ -109,7 +109,8 @@ class GameScreen(Screen):
         
         # Jump
         if self.input.get_keyboard().any_key_pressed(pygame.K_w, pygame.K_SPACE, pygame.K_UP):
-            self.player.vel[1] = -constant.JUMP_HEIGHT
+            self.player.jump()
+
 
         ## Location updating
 
