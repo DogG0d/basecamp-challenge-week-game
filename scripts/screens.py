@@ -58,7 +58,8 @@ class GameScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.tilemap = Tilemap(tile_size=16)
+        self.map = Map("Main", 16, "data/maps/0.json")
+        self.tilemap = self.map.tilemap
         
         # Entities
         self.player = PlayerEntity(self.assets, (50, 50), (8, 15))
@@ -108,11 +109,7 @@ class GameScreen(Screen):
         
         # Jump
         if self.input.get_keyboard().any_key_pressed(pygame.K_w, pygame.K_SPACE, pygame.K_UP):
-            self.player.jump()
-
-        # dash
-        if self.input.get_keyboard().any_key_pressed(pygame.K_x):
-            self.player.dash()
+            self.player.vel[1] = -constant.JUMP_HEIGHT
 
         ## Location updating
 
@@ -126,8 +123,11 @@ class EditorScreen(Screen):
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
+        # Assets
+        self.assets = self.game.get_assets()
+
         # Tilemap
-        self.map = Map(name="Main", tilesize=16)
+        self.map = Map(name="Main", tilesize=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
         
         self.current_tile_pos = (0, 0)
@@ -136,7 +136,7 @@ class EditorScreen(Screen):
         self.tile_group = 0
         self.tile_variant = 0
 
-        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img = self.assets[self.tile_list[self.tile_group]][self.tile_variant].copy()
         self.selected_tile_img.set_alpha(100)
 
         # HUD
@@ -180,11 +180,27 @@ class EditorScreen(Screen):
             if self.input.get_mouse().is_scrolling_down():
                 self.tile_variant = (self.tile_variant + 1) % len(self.game.assets[self.tile_list[self.tile_group]])
         elif self.input.get_keyboard().any_key_down(pygame.K_LCTRL, pygame.K_RCTRL):
+            # Save map
+            if self.input.get_keyboard().is_key_pressed(pygame.K_s):
+                self.map.save("data/maps/0.json")
+
+            # Zoom in
             if self.input.get_mouse().is_scrolling_up():
                 self.zoom += 0.25
+            
+            # Zoom out
             if self.input.get_mouse().is_scrolling_down():
                 self.zoom -= 0.25
         else:
+            # Place tile
+            if self.input.get_mouse().is_key_down(constant.Mouse.LEFT):
+                self.tilemap.add_tile(mouse_pos, self.scroll, self.tile_list[self.tile_group], self.tile_variant)
+            
+            # Remove tile
+            if self.input.get_mouse().is_key_down(constant.Mouse.RIGHT):
+                self.tilemap.remove_tile(mouse_pos, self.scroll)
+            
+            # Switch tile variant
             if self.input.get_mouse().is_scrolling_up():
                 self.tile_group = (self.tile_group - 1) % len(self.tile_list)
                 self.tile_variant = 0
@@ -192,23 +208,18 @@ class EditorScreen(Screen):
                 self.tile_group = (self.tile_group + 1) % len(self.tile_list)
                 self.tile_variant = 0
 
-        if self.input.get_mouse().is_key_down(constant.Mouse.LEFT):
-            self.tilemap.add_tile(mouse_pos, self.scroll, self.tile_list[self.tile_group], self.tile_variant)
-
-        # Move right
-        if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
-            self.scroll[0] += 2
-        
-        # Walk left
-        if self.input.get_keyboard().any_key_down(pygame.K_a, pygame.K_LEFT):
-            self.scroll[0] -= 2
-        
-        # Walk down
-        if self.input.get_keyboard().any_key_down(pygame.K_s, pygame.K_DOWN):
-            self.scroll[1] += 2
-        
-        # Walk up
-        if self.input.get_keyboard().any_key_down(pygame.K_w, pygame.K_UP):
-            self.scroll[1] -= 2
-
-
+            # Move right
+            if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
+                self.scroll[0] += 2
+            
+            # Walk left
+            if self.input.get_keyboard().any_key_down(pygame.K_a, pygame.K_LEFT):
+                self.scroll[0] -= 2
+            
+            # Walk down
+            if self.input.get_keyboard().any_key_down(pygame.K_s, pygame.K_DOWN):
+                self.scroll[1] += 2
+            
+            # Walk up
+            if self.input.get_keyboard().any_key_down(pygame.K_w, pygame.K_UP):
+                self.scroll[1] -= 2
