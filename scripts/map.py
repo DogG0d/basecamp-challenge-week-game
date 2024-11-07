@@ -130,12 +130,15 @@ class Tilemap():
 
 
     def render(self, surf: pygame.Surface, assets: dict[str, pygame.Surface | list[pygame.Surface] | scripts.entities.Animation], offset: tuple[int, int] = (0,0), zoom: float = 0):
+        # Zoom system
         x_zoom_comp = int(-(surf.get_width() * zoom * 0.5))
         y_zoom_comp = int(-(surf.get_height() * zoom * 0.5))
 
+        # Render off grid tiles
         for tile in self.offgrid_tiles:
             surf.blit(assets[tile["type"]][tile["variant"]], (tile["pos"][0] - offset[0], tile["pos"][1] - offset[1]))
-
+        
+        # Render on grid tiles
         for tile_x in range(int((offset[0] + x_zoom_comp) // self.tile_size), int((offset[0] + surf.get_width() - x_zoom_comp) // self.tile_size) + 1):
             for tile_y in range(int((offset[1] + y_zoom_comp) // self.tile_size), int((offset[1] + surf.get_height() - y_zoom_comp) // self.tile_size) + 1):
                 loc = (tile_x, tile_y)
