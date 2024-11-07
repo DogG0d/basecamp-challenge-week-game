@@ -127,6 +127,9 @@ class EditorScreen(Screen):
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
+        # Assets
+        self.assets = self.game.get_assets()
+
         # Tilemap
         self.map = Map(name="Main", tile_size=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
