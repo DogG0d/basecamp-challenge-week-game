@@ -58,7 +58,7 @@ class GameScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.map = Map("Main", 16, "data/maps/0.json")
+        self.map = Map(name="Main", tile_size=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
         
         # Entities
@@ -127,11 +127,8 @@ class EditorScreen(Screen):
         ### Setup
         pygame.display.set_caption(self.game.BASE_TITLE + " - Editor")
 
-        # Assets
-        self.assets = self.game.get_assets()
-
         # Tilemap
-        self.map = Map(name="Main", tilesize=16, path="data/maps/0.json")
+        self.map = Map(name="Main", tile_size=16, path="data/maps/0.json")
         self.tilemap = self.map.tilemap
         
         self.current_tile_pos = (0, 0)
@@ -216,14 +213,14 @@ class EditorScreen(Screen):
             if self.input.get_keyboard().any_key_down(pygame.K_d, pygame.K_RIGHT):
                 self.scroll[0] += 2
             
-            # Walk left
+            # Move left
             if self.input.get_keyboard().any_key_down(pygame.K_a, pygame.K_LEFT):
                 self.scroll[0] -= 2
             
-            # Walk down
+            # Move down
             if self.input.get_keyboard().any_key_down(pygame.K_s, pygame.K_DOWN):
                 self.scroll[1] += 2
             
-            # Walk up
+            # Move up
             if self.input.get_keyboard().any_key_down(pygame.K_w, pygame.K_UP):
                 self.scroll[1] -= 2
