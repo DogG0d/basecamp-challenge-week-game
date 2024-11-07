@@ -1,0 +1,23 @@
+{
+  "name": "The Dark Undergrounds",
+  "constants": {
+    "gravitation": 0.1
+  },
+  "background": {
+    "layer_1": {
+      "opacity": 1,
+      "parallax": true,
+      "depth": 10,
+      "speed": {
+        "x": 1,
+        "y": 1
+      }
+    }
+  },
+  "tilemap": {
+    "tile_size": 16,
+    "physics_types": ["grass", "stone"],
+    "on_grid": {},
+    "off_grid": {}
+  }
+}
