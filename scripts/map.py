@@ -17,7 +17,7 @@ class Map():
             self.load(path)
     
 
-    def load(self, path):
+    def load(self, path) -> None:
         ## Load file
         file = open(path, 'r')
         map_data: dict[str, any | dict] = json.load(file) 
