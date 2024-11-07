@@ -35,18 +35,22 @@ class Map():
 
             ## Decode tilemap
             # On grid
-            for loc in json_tilemap["on_grid"]:
-                json_tilemap[loc_from_json(loc)] = json_tilemap["on_grid"].get(loc)
+            on_grid = json_tilemap["on_grid"]
+            decoded_on_grid = dict()
+            for loc, tile in on_grid.items():
+                tile["loc"] = tuple(tile["loc"])
+                decoded_on_grid[loc_from_json(loc)] = tile
             
             # Off grid
-            for loc in json_tilemap["off_grid"]:
-                loc["loc"] = tuple(loc["loc"])
+            off_grid = json_tilemap["off_grid"]
+            for tile in off_grid:
+                tile["pos"] = tuple(tile["pos"])
 
             # Import tilemap attributes
             self.tilemap.tile_size = json_tilemap["tile_size"]
             self.tilemap.physics_types = json_tilemap["physics_types"]
-            self.tilemap.tilemap = json_tilemap["on_grid"]
-            self.tilemap.offgrid_tiles = json_tilemap["off_grid"]
+            self.tilemap.tilemap = decoded_on_grid
+            self.tilemap.offgrid_tiles = off_grid
 
 
     def save(self, path) -> None:
