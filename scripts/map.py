@@ -1,4 +1,5 @@
 import pygame
+import os
 import json
 import scripts.entities
 from scripts.utils import loc_from_json, loc_to_json
@@ -64,6 +65,9 @@ class Map():
         }, file)
 
         file.close()
+
+        if not os.path.exists(path):
+            return
 
 
 
