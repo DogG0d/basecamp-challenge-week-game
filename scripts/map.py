@@ -87,7 +87,7 @@ class Tilemap():
         #     self.tilemap[(10, 5 + i)] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
         
         # Middle block
-        self.tilemap[(0, 0)] = {"type": "stone", "variant": 1, "pos": (0, 0)}
+        self.tilemap[(0, 0)] = {"type": "stone", "variant": 1, "loc": (0, 0)}
     
 
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
@@ -113,7 +113,7 @@ class Tilemap():
 
         if is_on_grid:
             tile_loc = (int(map_pos[0] // self.tile_size), int(map_pos[1] // self.tile_size))
-            self.tilemap[tile_loc] = {"type": tile_type, "variant": tile_variant, "pos": tile_loc}
+            self.tilemap[tile_loc] = {"type": tile_type, "variant": tile_variant, "loc": tile_loc}
         else:
             self.offgrid_tiles.append({"type": tile_type, "variant": tile_variant, "pos": map_pos})
     
@@ -140,5 +140,5 @@ class Tilemap():
             for tile_y in range(int((offset[1] + y_zoom_comp) // self.tile_size), int((offset[1] + surf.get_height() - y_zoom_comp) // self.tile_size) + 1):
                 loc = (tile_x, tile_y)
                 if loc in self.tilemap:
-                    tile = self.tilemap.get(loc)
-                    surf.blit(assets[tile["type"]][tile["variant"]], (tile["pos"][0] * self.tile_size - offset[0], tile["pos"][1] * self.tile_size - offset[1]))
+                    tile = self.tilemap[loc]
+                    surf.blit(assets[tile["type"]][tile["variant"]], (tile["loc"][0] * self.tile_size - offset[0], tile["loc"][1] * self.tile_size - offset[1]))
