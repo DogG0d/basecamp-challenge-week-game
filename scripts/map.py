@@ -2,6 +2,7 @@ import pygame
 import os
 import json
 import scripts.entities
+import constant
 from scripts.utils import loc_from_json, loc_to_json
 
 NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
@@ -14,7 +15,7 @@ class Map():
         self.constants = {}
         self.background = {}
         if path is not None:
-            self.load(path)
+            self.load(constant.BASE_PATH + "maps/" + path)
     
 
     def load(self, path) -> None:

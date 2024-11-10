@@ -1,16 +1,14 @@
 import os
 import pygame
 import json
+import constant
 from constant import RGB
 from scripts.entities import Animation
-
-BASE_PATH = "data/"
-IMAGE_PATH = BASE_PATH + "images/"
 
 
 def load_image(path: str) -> pygame.Surface | None:
     try:
-        returnable = pygame.image.load(IMAGE_PATH + path).convert()
+        returnable = pygame.image.load(constant.IMAGE_PATH + path).convert()
         returnable.set_colorkey(RGB.BLACK)
         return returnable
     except:
@@ -19,7 +17,7 @@ def load_image(path: str) -> pygame.Surface | None:
 
 def load_images(path: str) -> list[pygame.Surface] | None:
     try:
-        return [load_image(path + '/' + img_name) for img_name in os.listdir(IMAGE_PATH + path)]
+        return [load_image(path + '/' + img_name) for img_name in os.listdir(constant.IMAGE_PATH + path)]
     except:
         return None
 
@@ -49,7 +47,7 @@ def load_assets(path: str) -> dict[str, pygame.Surface | list[pygame.Surface] | 
 
 # Version 1.0
 def save_assets(path: str, assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]) -> None:
-    if path in os.listdir(BASE_PATH):
+    if path in os.listdir(constant.BASE_PATH):
         with open(path) as file:
             data = json.load(file)
 
