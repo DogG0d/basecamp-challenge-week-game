@@ -170,7 +170,7 @@ class EditorScreen(Screen):
     
 
     def update(self):
-        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img = self.assets[self.tile_list[self.tile_group]][self.tile_variant].copy()
         self.selected_tile_img.set_alpha(100)
 
         mouse_pos = self.input.get_mouse().get_pos()
@@ -180,9 +180,9 @@ class EditorScreen(Screen):
         self.selected_tile_img: pygame.Surface
         if self.input.get_keyboard().any_key_down(pygame.K_LSHIFT, pygame.K_RSHIFT):
             if self.input.get_mouse().is_scrolling_up():
-                self.tile_variant = (self.tile_variant - 1) % len(self.game.assets[self.tile_list[self.tile_group]])
+                self.tile_variant = (self.tile_variant - 1) % len(self.assets[self.tile_list[self.tile_group]])
             if self.input.get_mouse().is_scrolling_down():
-                self.tile_variant = (self.tile_variant + 1) % len(self.game.assets[self.tile_list[self.tile_group]])
+                self.tile_variant = (self.tile_variant + 1) % len(self.assets[self.tile_list[self.tile_group]])
         elif self.input.get_keyboard().any_key_down(pygame.K_LCTRL, pygame.K_RCTRL):
             # Save map
             if self.input.get_keyboard().is_key_pressed(pygame.K_s):
