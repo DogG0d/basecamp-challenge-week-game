@@ -32,7 +32,7 @@ class PhysicsEntity():
         self.assets = assets
         self.type = type
         self.pos = list(pos)
-        self.size = list(size)
+        self.size = tuple(size)
 
         self.vel = [0,0]
         self.terminal_vel = 5
@@ -44,10 +44,11 @@ class PhysicsEntity():
         self.animation_offset = (-3, -3)
         self.x_flip = False
         self.y_flip = False
-        self.animation: Animation
+        self.last_movement = [0, 0]
+
         self.set_action("idle")
 
-        self.last_movement = [0, 0]
+        self.animation: Animation
     
     def copy_rect(self):
         return pygame.Rect(*self.pos, *self.size)
