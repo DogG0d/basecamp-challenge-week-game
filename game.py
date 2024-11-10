@@ -48,7 +48,7 @@ class Game():
         self.game_screen = GameScreen(game=self)
         self.editor_screen = EditorScreen(game=self)
         
-        self.current_screen = self.game_screen
+        self.current_screen = self.editor_screen
 
         
     def run(self):
