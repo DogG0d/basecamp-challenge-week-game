@@ -187,6 +187,10 @@ class EditorScreen(Screen):
             # Save map
             if self.input.get_keyboard().is_key_pressed(pygame.K_s):
                 self.map.save("data/maps/0.json")
+            
+            # Auto tile
+            if self.input.get_keyboard().is_key_pressed(pygame.K_t):
+                self.map.tilemap.auto_tile()
 
             # Zoom in
             if self.input.get_mouse().is_scrolling_up():

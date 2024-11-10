@@ -1,0 +1,82 @@
+{
+    "version": 2.0,
+    "assets": {
+        "player/idle": {
+            "type": "animation",
+            "path": "entities/player/idle",
+            "frame_duration": 6,
+            "looping": true
+        },
+        "player/run": {
+            "type": "animation",
+            "path": "entities/player/run",
+            "frame_duration": 4,
+            "looping": true
+        },
+        "player/jump": {
+            "type": "animation",
+            "path": "entities/player/jump",
+            "frame_duration": 5,
+            "looping": true
+        },
+        "player/slide": {
+            "type": "animation",
+            "path": "entities/player/slide",
+            "frame_duration": 5,
+            "looping": true
+        },
+        "player/wall_slide": {
+            "type": "animation",
+            "path": "entities/player/wall_slide",
+            "frame_duration": 5,
+            "looping": true
+        },
+        "decor": {
+            "type": "folder",
+            "path": "tiles/decor"
+        },
+        "large_decor": {
+            "type": "folder",
+            "path": "tiles/large_decor"
+        },
+        "stone": {
+            "type": "folder",
+            "path": "tiles/stone"
+        },
+        "grass": {
+            "type": "folder",
+            "path": "tiles/grass"
+        },
+        "clouds": {
+            "type": "folder",
+            "path": "clouds"
+        },
+        "leaf": {
+            "type": "particle",
+            "path": "particle/leaf",
+            "frame_duration": 5,
+            "looping": false
+        },
+        "particle": {
+            "type": "particle",
+            "path": "particle/particle",
+            "frame_duration": 5,
+            "looping": false
+        }
+    },
+    "auto_tiling": {
+        "default": {
+            "includes": ["stone", "grass"],
+            "ruleset": {
+                "1,0|1,0;0,1": 0,
+                "1,0;-1,0|1,0;0,1;-1,0": 1,
+                "-1,0|0,1;-1,0": 2,
+                "0,-1;0,1;-1,0": 3,
+                "0,-1;-1,0": 4,
+                "0,-1;1,0;-1,0|0,-1;1,0;0,1;-1,0": 5,
+                "0,-1;1,0": 6,
+                "0,-1;1,0;0,1": 7
+            }
+        }
+    }
+}

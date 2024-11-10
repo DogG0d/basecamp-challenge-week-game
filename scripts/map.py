@@ -8,10 +8,9 @@ from scripts.utils import loc_from_json, loc_to_json
 NEIGHBOUR_OFFSETS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
 
 class Map():
-    def __init__(self, name: str, tile_size: int = 16, path: str = None) -> None:
+    def __init__(self, name: str, tile_size: int = 16, path: str = None, auto_tiling_config: dict = {}) -> None:
         self.name = name
-        self.tilemap = Tilemap(tile_size)
-        self.path = path
+        self.tilemap = Tilemap(tile_size=tile_size, auto_tiling_config=auto_tiling_config)
         self.constants = {}
         self.background = {}
         if path is not None:
@@ -76,16 +75,12 @@ class Map():
 
 
 class Tilemap():
-    def __init__(self, tile_size: int = 16):
+    def __init__(self, tile_size: int = 16, auto_tiling_config: dict = {}):
         self.tile_size = tile_size
         self.tilemap = {}
         self.offgrid_tiles = []
         self.physics_types = ["grass", "stone"]
-
-        ### Test map generator
-        # for i in range(10):
-        #     self.tilemap[(3 + i, 10)] = {"type": "grass", "variant": 1, "pos": (3 + i, 10)}
-        #     self.tilemap[(10, 5 + i)] = {"type": "stone", "variant": 1, "pos": (10, 5 + i)}
+        self.auto_tiling_config = auto_tiling_config
         
         # Middle block
         self.tilemap[(0, 0)] = {"type": "stone", "variant": 1, "loc": (0, 0)}
@@ -127,6 +122,44 @@ class Tilemap():
 
     def highlight_tile(self) -> None:
         pass
+
+
+    def auto_tile(self, area: tuple[tuple[int, int], tuple[int, int]] = None, config_name: str = "default") -> None:
+        config: dict[str, list[str] | dict[tuple, int]] = self.auto_tiling_config.get(config_name)
+        if config is None:
+            return
+        
+        if area is None:
+            tiles = self.tilemap.values()
+        else:
+            tiles = list()
+            start, stop = area
+            for x in range(start[0], stop[0] + 1):
+                for y in range(start[1], stop[1] + 1):
+                    if (x, y) in self.tilemap:
+                        tiles.append(self.tilemap[(x, y)])
+        
+        included_tiles = config["includes"]
+        ruleset = config["ruleset"]
+
+
+        for tile in tiles:
+            if tile["type"] not in included_tiles:
+                continue
+
+            neighbours = []
+
+            for offset in [(0, -1), (-1, 0), (1, 0), (0, 1)]:
+                check_loc = (tile["loc"][0] + offset[0], tile["loc"][1] + offset[1])
+                if (check_loc in self.tilemap) and (self.tilemap[check_loc]["type"] == tile["type"]):
+                    neighbours.append(offset)
+            
+            neighbours = tuple(sorted(neighbours))
+
+            if neighbours in ruleset:
+                tile["variant"] = ruleset[neighbours]
+            
+
 
 
     def render(self, surf: pygame.Surface, assets: dict[str, pygame.Surface | list[pygame.Surface] | scripts.entities.Animation], offset: tuple[int, int] = (0,0), zoom: float = 0):
