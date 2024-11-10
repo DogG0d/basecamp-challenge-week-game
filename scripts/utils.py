@@ -44,6 +44,23 @@ def load_images(path: str) -> list[pygame.Surface] | None:
 #     return assets
 
 
+# Version 2.0
+def load_assets(path: str) -> dict[str, dict[str, pygame.Surface | list[pygame.Surface] | Animation]] | None:
+    if os.path.exists(constant.BASE_PATH + path):
+        with open(constant.BASE_PATH + path, "r") as file:
+            data: dict[str, dict | any] = json.load(file)
+
+            # Load assets
+            for name, asset in data["assets"].items():
+                match asset["type"]:
+                    case "animation" | "particle":
+                        data["assets"][name] = Animation(images=load_images(asset["path"]), frame_duration=asset["frame_duration"], looping=asset["looping"])
+                    case "folder":
+                        data["assets"][name] = load_images(path=asset["path"])
+                    case "file":
+                        data["assets"][name] = load_image(path=asset["path"])
+                    case _:
+                        raise Exception(f"Asset named \"{asset["type"]}\" is invalid.")
 
             # Load auto tiling rulesets
             for name, config in data["auto_tiling"].items():

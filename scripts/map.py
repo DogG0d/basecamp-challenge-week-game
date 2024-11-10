@@ -87,13 +87,13 @@ class Tilemap():
     
 
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
-        tiles = []
+        neighbouring_tiles = []
         tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
         for offset in NEIGHBOUR_OFFSETS:
             check_loc = (tile_loc[0] + offset[0], tile_loc[1] + offset[1])
             if check_loc in self.tilemap:
-                tiles.append(self.tilemap[check_loc])
-        return tiles
+                neighbouring_tiles.append(self.tilemap[check_loc])
+        return neighbouring_tiles
 
 
     def physics_rect_around(self, pos: tuple[int, int]) -> list[pygame.Rect]:
