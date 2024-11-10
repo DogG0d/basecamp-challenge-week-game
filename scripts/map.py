@@ -83,7 +83,7 @@ class Tilemap():
         self.auto_tiling_config = auto_tiling_config
         
         # Middle block
-        self.tilemap[(0, 0)] = {"type": "stone", "variant": 1, "loc": (0, 0)}
+        self.tilemap[(10, 10)] = {"type": "stone", "variant": 1, "loc": (10, 10)}
     
 
     def get_tiles_around(self, pos: tuple[int, int]) -> list[dict]:
