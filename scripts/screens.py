@@ -58,7 +58,7 @@ class GameScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.map = Map(name="Main", tile_size=16, path="data/maps/0.json")
+        self.map = self.game.maps[0]
         self.tilemap = self.map.tilemap
         
         # Entities
@@ -131,7 +131,7 @@ class EditorScreen(Screen):
         self.assets = self.game.get_assets()
 
         # Tilemap
-        self.map = Map(name="Main", tile_size=16, path="data/maps/0.json")
+        self.map = self.game.maps[0]
         self.tilemap = self.map.tilemap
         
         self.current_tile_pos = (0, 0)
@@ -170,7 +170,7 @@ class EditorScreen(Screen):
     
 
     def update(self):
-        self.selected_tile_img = self.game.get_assets()[self.tile_list[self.tile_group]][self.tile_variant].copy()
+        self.selected_tile_img = self.assets[self.tile_list[self.tile_group]][self.tile_variant].copy()
         self.selected_tile_img.set_alpha(100)
 
         mouse_pos = self.input.get_mouse().get_pos()
@@ -178,15 +178,25 @@ class EditorScreen(Screen):
         self.current_tile_pos = ((mouse_pos[0] + self.scroll[0]) // self.tilemap.tile_size, (mouse_pos[1] + self.scroll[1])  // self.tilemap.tile_size)
         
         self.selected_tile_img: pygame.Surface
+
         if self.input.get_keyboard().any_key_down(pygame.K_LSHIFT, pygame.K_RSHIFT):
+            ### SHIFT commands
+            # + tile variant
             if self.input.get_mouse().is_scrolling_up():
-                self.tile_variant = (self.tile_variant - 1) % len(self.game.assets[self.tile_list[self.tile_group]])
+                self.tile_variant = (self.tile_variant - 1) % len(self.assets[self.tile_list[self.tile_group]])
+            
+            # - tile variant
             if self.input.get_mouse().is_scrolling_down():
-                self.tile_variant = (self.tile_variant + 1) % len(self.game.assets[self.tile_list[self.tile_group]])
+                self.tile_variant = (self.tile_variant + 1) % len(self.assets[self.tile_list[self.tile_group]])
         elif self.input.get_keyboard().any_key_down(pygame.K_LCTRL, pygame.K_RCTRL):
+            ### CTRL commands
             # Save map
             if self.input.get_keyboard().is_key_pressed(pygame.K_s):
                 self.map.save("data/maps/0.json")
+            
+            # Auto tile
+            if self.input.get_keyboard().is_key_pressed(pygame.K_t):
+                self.map.tilemap.auto_tile()
 
             # Zoom in
             if self.input.get_mouse().is_scrolling_up():

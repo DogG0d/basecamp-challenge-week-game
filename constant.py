@@ -26,6 +26,10 @@ class Mouse:
   SCROLL_DOWN = -2
 
 
+# OS
+BASE_PATH = "data/"
+IMAGE_PATH = BASE_PATH + "images/"
+
 # Screen
 DISPLAY_SIZE = (864, 486)
 GAME_SIZE = (432, 243)

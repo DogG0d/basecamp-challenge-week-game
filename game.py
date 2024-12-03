@@ -31,13 +31,14 @@ class Game():
         self.input = InputStream()
 
         # Assets
-        self.assets = load_assets("assets.json")
+        self.asset_config = load_assets("assets-v2.json")
+        self.assets = self.asset_config["assets"]
         self.assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]
 
 
         # Maps
         self.maps = {
-            0: Map("Main", self)
+            0: Map(name="Main", path="0.json", auto_tiling_config=self.asset_config["auto_tiling"])
         }
 
         # Game screens
