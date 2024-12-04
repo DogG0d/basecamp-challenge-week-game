@@ -1,45 +1,63 @@
 # Basecamp Challenge Week
 
-## Game idee
+## Game
 
-Platformer
+- Platformer
+- Single player
 
 ## Thema
 
 Onder de Rotterdamse Havens
 
-## Doel
+## Objectives
 
-Je moet naar Albert Heijn, maar niet via de straten omdat het regent.
+- Go to the Albert Heijn
+
+## Strategy
+
+- Go via the undergrounds
+    - Because it is raining outside
+- Avoid Jumbo
+    - Because the boss is evil
+    - However: The Jumbo is on the way to the *AH
+
+## Conflict
+
+- The underground is not a safe place
+    - There is hazardous/toxic sewage
+        - You must parkour over deep holes and sewage
+    - There are monsters
+        - Exploding mushroom monster
+        - 
 
 ## Features
 
 ## Game
 
 - Movement
-
-  - Walk
-  - Dashing
-  - jumping
-  - walljump?
-  - interlayer?
-  - attack
+    
+    - Walk
+    - Dashing
+    - jumping
+    - walljump?
+    - interlayer?
+    - attack
 
 - Obstacles
-
-  - spikes
-  - lava
-  - water
-  - poision?
-  - enemies
+    
+    - spikes
+    - lava
+    - water
+    - poision?
+    - enemies
 
 - Design
-
-  - textures
-  - sprites
+    
+    - textures
+    - sprites
 
 - Map
-  - Levels
+    - Levels
 
 ## Storyline
 
@@ -49,45 +67,8 @@ het regent
 ondergrondse tunnels
 Spring over water
 
-> double jump
-> dash
-> double jump dash combo?
-> walljump
-> dummy fight
-> test
-
-## Structure
-
-- World group
-
-  - Entity group
-
-    - Enemy group
-
-      - Enemy opject
-        - Entity object
-          - World object
-
-    - Projectile group
-      - Entity object
-        - World object
-
-  - Background group
-
-    - Elements
-
-      - Floor objects
-
-        - World object
-
-      - Obstacle object
-        - World object
-
-    - Background
-
-  - Player group
-    - Player object
-      - Entity object
-        - World object
-
----
+> double jump\
+> dash\
+> double jump dash combo?\
+> walljump\
+> dummy fight\
