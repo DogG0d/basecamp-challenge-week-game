@@ -40,21 +40,23 @@ def load_images(path: str) -> list[pygame.Surface] | None:
 #                     assets.update({asset: Animation(load_images(properties["path"]), properties["frame_duration"], properties["looping"])})
 #                 case _:
 #                     raise Exception(f"Asset named \"{properties["type"]}\" is invalid.")
-    
+
 #     return assets
 
 
 # Version 2.0
 def load_assets(path: str) -> dict[str, dict[str, pygame.Surface | list[pygame.Surface] | Animation]] | None:
     if os.path.exists(constant.BASE_PATH + path):
-        with open(constant.BASE_PATH + path, "r") as file:
+        with open(constant.BASE_PATH + path, 'r') as file:
             data: dict[str, dict | any] = json.load(file)
 
             # Load assets
             for name, asset in data["assets"].items():
                 match asset["type"]:
                     case "animation" | "particle":
-                        data["assets"][name] = Animation(images=load_images(asset["path"]), frame_duration=asset["frame_duration"], looping=asset["looping"])
+                        data["assets"][name] = Animation(images=load_images(asset["path"]),
+                                                         frame_duration=asset["frame_duration"],
+                                                         looping=asset["looping"])
                     case "folder":
                         data["assets"][name] = load_images(path=asset["path"])
                     case "file":
@@ -73,21 +75,22 @@ def load_assets(path: str) -> dict[str, dict[str, pygame.Surface | list[pygame.S
                         for offset in combination.split(';'):
                             x, y = map(int, offset.split(','))
                             converted_combination.append((x, y))
-                        
+
                         converted_combination = tuple(sorted(converted_combination))
 
                         converted_ruleset[converted_combination] = outcome
-                
+
                 data["auto_tiling"][name]["ruleset"] = converted_ruleset
-            
+
             return data
 
 
 # Version 2.0
 def save_assets(path: str, assets: dict[str, pygame.Surface | list[pygame.Surface] | Animation]) -> None:
     if path in os.listdir(constant.BASE_PATH):
-        with open(path) as file:
-            data = json.load(file)
+        with open(path, 'w') as file:
+            # noinspection PyTypeChecker
+            json.dump(assets, file)
 
 
 def loc_from_json(loc: str) -> tuple[int, int]:
